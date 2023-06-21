@@ -1,9 +1,10 @@
 import pygame
+screen=pygame.display.set_mode((400,800))
 class Sound:
     def __init__(self):
         pygame.mixer.init()
         self.game_sound = pygame.mixer.Sound("game_sound.wav")
-        self.shoot_sound = pygame.mixer.Sound("shoot.wav")
+        self.shoot_sound = pygame.mixer.Sound("shoot_sound.wav")
         self.shoot_sound.set_volume(1.0)  # Adjust the volume of the shooting sound
         self.game_sound.set_volume(0.5)   # Adjust the volume of the game sound
     def play_game_sound(self):
@@ -18,3 +19,10 @@ game = Sound()
 game.play_game_sound()
 # When there is a shooting event, play the shoot sound
 game.play_shoot_sound()
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+pygame.quit()
