@@ -12,10 +12,7 @@ def get_animations():
         "icecream": {},
         "ice_boss": {},
         "ice_witch": {},
-
-
     }
-
 
 
 
