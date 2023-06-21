@@ -6,6 +6,7 @@ def get_animations():
     animations = {
         "knight":{},
         "demon":{},
+        
     }
 
     # path_list=['./games/epic_dungeon/assets/knight/knight walk animation'+str(num)+'.png' for num in range(1,9)]
