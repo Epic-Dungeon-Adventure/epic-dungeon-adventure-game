@@ -12,10 +12,10 @@ clock = pygame.time.Clock()
 animations = get_animations()
 
 
-head = Entity(animations['knight']['walk']) #<=====      eddit here
+head = Entity(animations['fire man']['death']) #<=====      eddit here
 head_group = pygame.sprite.Group()
 head_group.add(head)
-head.animation_speed *= 2 #<=====      eddit here (not necessary)
+head.animation_speed *= 1 #<=====      eddit here (not necessary)
 
 
 posx = 50
