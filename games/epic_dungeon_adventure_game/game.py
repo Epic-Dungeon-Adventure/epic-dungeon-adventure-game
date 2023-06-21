@@ -5,14 +5,14 @@ from .entitty import Entity
 from .animations import get_animations
 
 pygame.init()
-screen = pygame.display.set_mode((1600,800))
+screen = pygame.display.set_mode((1300,600))
 pygame.display.set_caption('Runner')
 clock = pygame.time.Clock()
 
 animations = get_animations()
 
 
-head = Entity(animations['knight']['walk']) #<=====      eddit here
+head = Entity(animations['icecream']['death']) #<=====      eddit here
 head_group = pygame.sprite.Group()
 head_group.add(head)
 head.animation_speed *= 2 #<=====      eddit here (not necessary)
@@ -30,7 +30,7 @@ def play():
                 pygame.quit()
                 exit()
         head.update(posx, posy)
-            
+
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w]:
             posy -= 3
@@ -40,8 +40,8 @@ def play():
             posx -= 3
         if keys[pygame.K_d]:
             posx += 3
-        
-        
+
+
 
 
         screen.fill((0, 0, 0))
