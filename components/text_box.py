@@ -33,13 +33,15 @@ class TextBox():
         word_surface = self.font.render(self.used_words, True, self.font_color)
         self.screen.blit(word_surface, (self.box_pos[0] + 10, self.last_word_pos[1]))
 
-
+        if int(self.word_index + self.speed) >= len(self.words):
+            self.render_previous_lines()
+            return "finish"
+        
         if int(self.word_index + self.speed) == int(self.word_index):
             self.word_index += self.speed
             self.render_previous_lines()
             return
         
-
         current_word = self.words[int(self.word_index + self.speed)]
         word_surface = self.font.render(current_word, True, self.font_color)
         word_width , word_height = word_surface.get_size()

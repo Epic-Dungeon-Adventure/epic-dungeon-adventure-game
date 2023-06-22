@@ -15,7 +15,7 @@ animations = get_animations()
 game_state = "walk"
 
 head = Entity(animations['ice_boss']['idle'])
-head.animate(animations['ice_boss']['attack'])
+head.animate(animations['Dragon monster']['death'])
 head_group = pygame.sprite.Group()
 head_group.add(head)
 head.animation_speed *= 1.5
@@ -25,17 +25,9 @@ posx = 50
 posy = 50
 
 
+# sound = Sound("./games/epic_dungeon_adventure_game/assets/game_sound.wav")
 
-# class MainCharacter():
-#     def __init__(self, default_animation):
-#         self.entity = Entity(default_animation)
-
-    
-
-
-# sound = Sound("./games/epic_dungeon_adventure/assets/game_sound.wav")
-
-# sound.play()
+# sound.play(True)
 
 
 text = "In the depths of a frozen cavern, amidst towering ice walls and glittering icicles, an awe-inspiring ice dragon awaits your arrival. Its colossal body, adorned with shimmering scales of ice, emanates an intense coldness that permeates the chamber. As the dragon fixes its piercing gaze upon you, its voice resonates with ancient wisdom, questioning your purpose in its icy domain. With a mixture of wonder and trepidation, your fate becomes intertwined with this majestic creature, as you stand on the threshold of a chilling and thrilling adventure."
