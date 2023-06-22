@@ -33,10 +33,15 @@ class Game():
             pass
         if self.state == "combat monster turn":
             # animate monster attack
+            self.monster.animate(self.animations["ice_witch"]['attack'])
             # animate user take damage
+            self.user.animate(self.animations["icecream"]['idle'])
             # give user damage
+            self.user.take_damage(10)
             # check if user is dead
-            pass
+            if self.user.health <= 0:
+                self.user.animate(self.animations["icecream"]['death'])
+                pygame.quit()
         if self.state == "walk":
             # animate walk
             # check for collision with event box
