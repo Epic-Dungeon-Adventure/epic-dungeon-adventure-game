@@ -25,9 +25,9 @@ def get_animations():
         "fire man":{},
     }
 
-    # path_list=['./games/epic_dungeon/assets/knight/knight walk animation'+str(num)+'.png' for num in range(1,9)]
-    # demon_idle = Animation(path_list, 800, 400)
-    # animations['demon']['idle'] = demon_idle.farme_list
+    path_list=['./games/epic_dungeon_adventure_game/assets/knight/knight walk animation'+str(num)+'.png' for num in range(1,9)]
+    knight_walk = Animation(path_list, 200, 200)
+    animations['knight']['walk'] = knight_walk.farme_list
 
 
 

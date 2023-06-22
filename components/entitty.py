@@ -1,17 +1,20 @@
 import pygame
 
+pygame.display.init()
+pygame.display.set_mode((1600,800))
+
 class Entity(pygame.sprite.Sprite):
-    def __init__(self, default_animation, health = 0):
+    def __init__(self, default_animation, health = 0 , size = None):
         super().__init__()
         self.health = health
         self.default_animation = default_animation
         self.current_animation = default_animation
         self.image = default_animation[0].convert_alpha()
-        self.image = pygame.transform.scale(self.image, (25, 25))
+        if size != None:
+            self.image = pygame.transform.scale(self.image, size)
         self.rect = self.image.get_rect()
         self.animation_index = 0
         self.animation_speed = 0.1
-        
 
     def update(self, x_pos, y_pos, loop = False):
         self.animation_index += self.animation_speed
@@ -24,7 +27,6 @@ class Entity(pygame.sprite.Sprite):
         self.rect.y = y_pos
 
     def animate(self, image_list):
-        self.image = image_list[self.animation_index]
         self.current_animation = image_list
 
     def take_damage(self, damage):
