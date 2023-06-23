@@ -36,7 +36,7 @@ def get_animations():
 
 
 
-<<<<<<<<< Temporary merge branch 1
+
 ############ demon_ice1
 
     path_list = ['games/epic_dungeon_adventure_game/assets/demon_ice/demon_ice1/ice_idel/' + str(num) + '.png' for num in range(1, 5)]
