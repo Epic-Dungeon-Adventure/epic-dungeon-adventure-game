@@ -1,16 +1,23 @@
-# import pygame as pg
-# import sys
+import pygame
+import math
+
+class Terrain(pygame.sprite.Sprite):
+    def __init__(self, image_path, width, height,postion):
+        super().__init__()
+        self.image = pygame.transform.scale(pygame.image.load(image_path).convert_alpha(), (width, height))
+        self.rect = self.image.get_rect()
+        self.rect.x = postion[0]
+        self.rect.y = postion[1]
+        self.scroll = 0
 
 
+    def update(self, scroll_speed):
+        self.scroll-= scroll_speed
 
-# pg.init()
-# screen= pg.display.set_mode((1000,500))
+        if abs(self.scroll) > self.image.get_width():
+            self.scroll = 0
 
-
-# class Terrain(pg.sprite.Sprite):
-#     def__init__(self,image,pos):
-#         super().__init__()
-#         self.image=pg.image.load(image)
-#         self.rect=self.image.get_rect()
-#         self.rect.y=pos[0]
-#         self.rect.x=pos[1]
+    def render(self, screen):
+        tiles = math.ceil(screen.get_width()  / self.image.get_width()) + 1
+        for i in range(-1, tiles):
+            screen.blit(self.image, (i * self.image.get_width() + self.scroll, self.rect.y))
