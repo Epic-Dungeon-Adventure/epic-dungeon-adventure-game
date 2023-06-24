@@ -6,9 +6,10 @@ from components.text_box import TextBox
 from components.sound import Sound
 from .animations import get_animations
 from .game_class import Game
+
 pygame.init()
-screen = pygame.display.set_mode((1600,800))
-pygame.display.set_caption('Runner')
+screen = pygame.display.set_mode((1600, 800))
+pygame.display.set_caption("Runner")
 clock = pygame.time.Clock()
 
 animations = get_animations()
@@ -58,11 +59,8 @@ def play():
         # if keys[pygame.K_d]:
         #     posx += 3
 
-
-
-
         screen.fill((0, 0, 0))
-        game.draw(screen)
+        game.draw()
         game.update_state()
         # text_box.render_word()
         # head_group.draw(screen)

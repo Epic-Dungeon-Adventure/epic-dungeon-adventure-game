@@ -26,7 +26,7 @@ class TextBox():
         word_surface = self.font.render(self.used_words, True, self.font_color)
         self.screen.blit(word_surface, (self.box_pos[0] + 10, self.last_word_pos[1]))
 
-    def render_word(self):
+    def render_words(self):
         box_border_radius = 30
         rect = pygame.Rect(self.box_pos,self.box_size)
         pygame.draw.rect(self.screen, self.box_color, rect, False, box_border_radius)
