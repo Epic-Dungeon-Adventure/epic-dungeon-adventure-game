@@ -65,4 +65,5 @@ def play():
         # text_box.render_word()
         # head_group.draw(screen)
         pygame.display.update()
+        print(clock.get_fps())
         clock.tick(60)

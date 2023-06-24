@@ -46,6 +46,15 @@ class TextBox():
         word_surface = self.font.render(current_word, True, self.font_color)
         word_width , word_height = word_surface.get_size()
 
+        if "\n" in current_word:
+            if self.used_words != "":
+                self.rendered_lines.append([self.font.render(self.used_words, True, self.font_color), (self.box_pos[0] + 10, self.last_word_pos[1])])
+            self.used_words = ""
+            self.last_word_pos[0] = self.box_pos[0] + self.margin
+            self.last_word_pos[1] += word_height
+            self.word_index += 1
+            return
+
         if self.last_word_pos[0] + word_width >= self.box_size[0] - self.margin:
             self.rendered_lines.append([self.font.render(self.used_words, True, self.font_color), (self.box_pos[0] + 10, self.last_word_pos[1])])
             self.used_words = current_word + " "
