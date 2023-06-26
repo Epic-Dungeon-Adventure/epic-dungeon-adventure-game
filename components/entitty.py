@@ -14,10 +14,11 @@ class Entity(pygame.sprite.Sprite):
         if size != None:
             self.image = pygame.transform.scale(self.image, size)
         self.rect = self.image.get_rect()
-        self.animation_index = 0
+        self.animation_index = 0 
         self.animation_speed = 0.1
         self.animation_complete = True
         self.loop = False
+        self.kill_after_animation = False
 
     def update(self, x_pos="default", y_pos="default"):
         if x_pos == "default":
@@ -30,6 +31,8 @@ class Entity(pygame.sprite.Sprite):
             if self.loop == False:
                 self.animation_index = 0
                 self.current_animation = self.default_animation
+            if self.kill_after_animation == True:
+                self.kill()
         self.image = self.current_animation[
             int(self.animation_index) % len(self.current_animation)
         ]
@@ -37,11 +40,10 @@ class Entity(pygame.sprite.Sprite):
         self.rect.x = x_pos
         self.rect.y = y_pos
 
-    def animate(
-        self, image_list, reset_index=False, reset_completion=False, loop=False
-    ):
+    def animate(self, image_list, reset_index=False, reset_completion=False, loop=False, kill = False):
         self.current_animation = image_list
         self.loop = loop
+        self.kill_after_animation = kill
         if reset_completion == True:
             self.animation_complete = False
         if reset_index == True:

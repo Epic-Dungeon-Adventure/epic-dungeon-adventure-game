@@ -11,10 +11,10 @@ class Terrain(pygame.sprite.Sprite):
         self.scroll = 0
         self.scroll_speed = scroll_speed
         
-
-    def update(self):
+    def update(self, postion = None):
+        if postion != None:
+            self.rect.topleft = postion
         self.scroll-= self.scroll_speed
-
         if abs(self.scroll) > self.image.get_width():
             self.scroll = 0
 

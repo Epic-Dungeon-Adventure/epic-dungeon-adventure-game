@@ -13,6 +13,7 @@ def get_animations():
         "ice boss":{},
         "demon boss":{},
         "main character":{},
+        "water heavy":{},
     }
 
 
@@ -82,6 +83,16 @@ def get_animations():
     path_list = ['games/epic_dungeon_adventure_game/assets/demon_boss/take_hit/demon_take_hit_' + str(num) + '.png' for num in range(1,6)]
     ice_death = Animation(path_list, 400, 400)
     animations['demon boss']['take hit'] = ice_death.farme_list
+    
+    
+
+
+
+
+    path_list = ['games/epic_dungeon_adventure_game/assets/spells/water/tile' + str(num) + '.png' for num in range(1,21)]
+    ice_death = Animation(path_list, 400, 400)
+    animations['water heavy']['start'] = ice_death.farme_list
+
     # Dark_Woods
     # path_list=['./games/epic_dungeon_adventure_game/assets/Dark_Woods/evil_wizard/Idle/Idle'+str(num)+'.png' for num in range(1,9)]
     # Evil_Idle = Animation(path_list, 200, 200)

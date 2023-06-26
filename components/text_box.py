@@ -27,7 +27,7 @@ class TextBox():
         self.screen.blit(word_surface, (self.box_pos[0] + 10, self.last_word_pos[1]))
 
     def render_words(self):
-        box_border_radius = 30
+        box_border_radius = 10
         rect = pygame.Rect(self.box_pos,self.box_size)
         pygame.draw.rect(self.screen, self.box_color, rect, False, box_border_radius)
         word_surface = self.font.render(self.used_words, True, self.font_color)
@@ -36,22 +36,24 @@ class TextBox():
         if int(self.word_index + self.speed) >= len(self.words):
             self.render_previous_lines()
             return "finish"
-        
+
         if int(self.word_index + self.speed) == int(self.word_index):
             self.word_index += self.speed
             self.render_previous_lines()
             return
-        
+
         current_word = self.words[int(self.word_index + self.speed)]
         word_surface = self.font.render(current_word, True, self.font_color)
         word_width , word_height = word_surface.get_size()
 
+        
+
         if "\n" in current_word:
             if self.used_words != "":
                 self.rendered_lines.append([self.font.render(self.used_words, True, self.font_color), (self.box_pos[0] + 10, self.last_word_pos[1])])
-            self.used_words = ""
             self.last_word_pos[0] = self.box_pos[0] + self.margin
             self.last_word_pos[1] += word_height
+            self.used_words = ""
             self.word_index += 1
             return
 
@@ -60,6 +62,8 @@ class TextBox():
             self.used_words = current_word + " "
             self.last_word_pos[0] = self.box_pos[0] + self.margin
             self.last_word_pos[1] += word_height
+
+            
         else: self.used_words += current_word + " "
 
         self.render_previous_lines()

@@ -14,28 +14,6 @@ clock = pygame.time.Clock()
 
 animations = get_animations()
 
-
-# head = Entity(animations['ice_boss']['idle'])
-# head.animate(animations['Dragon monster']['death'])
-# head_group = pygame.sprite.Group()
-# head_group.add(head)
-# head.animation_speed *= 1.5
-
-
-# posx = 50
-# posy = 50
-
-
-# # sound = Sound("./games/epic_dungeon_adventure_game/assets/game_sound.wav")
-
-# # sound.play(True)
-
-
-# text = "In the depths of a frozen cavern, amidst towering ice walls and glittering icicles, an awe-inspiring ice dragon awaits your arrival. Its colossal body, adorned with shimmering scales of ice, emanates an intense coldness that permeates the chamber. As the dragon fixes its piercing gaze upon you, its voice resonates with ancient wisdom, questioning your purpose in its icy domain. With a mixture of wonder and trepidation, your fate becomes intertwined with this majestic creature, as you stand on the threshold of a chilling and thrilling adventure."
-# font = pygame.font.SysFont("Inkfree",40)
-
-# text_box = TextBox(screen, (1600,300), 'gray', text, font, 'black', 0.1)
-
 game = Game(screen)
 
 
@@ -47,23 +25,13 @@ def play():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-        # head.update(posx, posy)
 
-        # keys = pygame.key.get_pressed()
-        # if keys[pygame.K_w]:
-        #     posy -= 3
-        # if keys[pygame.K_s]:
-        #     posy += 3
-        # if keys[pygame.K_a]:
-        #     posx -= 3
-        # if keys[pygame.K_d]:
-        #     posx += 3
+        
 
         screen.fill((0, 0, 0))
         game.draw()
         game.update_state()
-        # text_box.render_word()
-        # head_group.draw(screen)
+       
         pygame.display.update()
-        print(clock.get_fps())
+        # print(clock.get_fps())
         clock.tick(60)
