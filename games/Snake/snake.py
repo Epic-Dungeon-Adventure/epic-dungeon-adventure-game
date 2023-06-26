@@ -11,20 +11,19 @@ pygame.display.set_caption('Snake Game')
 
 clock = pygame.time.Clock()
 
-# Define game colors
 BLACK = (0, 0, 0)
 
 
-background_image = pygame.image.load('background.png')
+background_image = pygame.image.load('assists/background.png')
 background_image = pygame.transform.scale(background_image, (screen_width, screen_height))
 
 snake_color = (0, 255, 0) 
-food_colors = [(255, 0, 0), (0, 0, 255), (255, 255, 0),(97,98,100)]  #colors for the food
+food_colors = [(255, 0, 0), (0, 0, 255), (255, 255, 0),(97,98,100)]  
 
-game_over_sound = pygame.mixer.Sound('game_over.wav')
-eat_food_sound = pygame.mixer.Sound('eat_food.mp3')
-background_music = pygame.mixer.Sound('background_music.wav')
-game_win_sound = pygame.mixer.Sound('win_game.wav')
+game_over_sound = pygame.mixer.Sound('sound/game_over.wav')
+eat_food_sound = pygame.mixer.Sound('sound/eat_food.mp3')
+background_music = pygame.mixer.Sound('sound/background_music.wav')
+game_win_sound = pygame.mixer.Sound('sound/win_game.wav')
 
 # Set the volume for the background music and eating sound
 background_music.set_volume(0.5)
@@ -32,14 +31,14 @@ eat_food_sound.set_volume(1.0)
 game_win_sound.set_volume(0.8)
 
 #  font for the score
-font_style = pygame.font.SysFont(None, 30)
+font_style = pygame.font.SysFont('font/Pixeltype.ttf', 30)
 
 class SnakeGame:
     def __init__(self, level):
         self.snake_block_size = 20
         self.level = level
-        self.snake_speed = 15 + 5 * level  # Increase snake speed based on level
-        self.target_length = 10 + 5 * level  # Increase target length based on level
+        self.snake_speed = 15 + 5 * level  
+        self.target_length = 20 + 5 * level  
         self.snake_length = 1
         self.x1 = screen_width / 2
         self.y1 = screen_height / 2
@@ -48,7 +47,7 @@ class SnakeGame:
         self.snake_list = []
         self.food_x = round(random.randrange(0, screen_width - self.snake_block_size) / 20.0) * 20.0
         self.food_y = round(random.randrange(0, screen_height - self.snake_block_size) / 20.0) * 20.0
-        self.food_color = random.choice(food_colors)  # Randomly select a color for the food
+        self.food_color = random.choice(food_colors) 
         self.game_over = False
         self.game_won = False
 
@@ -108,10 +107,10 @@ class SnakeGame:
             self.snake_length += 1
             self.food_x = round(random.randrange(0, screen_width - self.snake_block_size) / 20.0) * 20.0
             self.food_y = round(random.randrange(0, screen_height - self.snake_block_size) / 20.0) * 20.0
-            self.food_color = random.choice(food_colors)  # Randomly select a new color for the food
+            self.food_color = random.choice(food_colors)  
             pygame.mixer.Sound.set_volume(background_music, 0.5)
 
-            if self.snake_length - 1 >= self.target_length:  # Check if target length is reached
+            if self.snake_length - 1 >= self.target_length: 
                 pygame.mixer.Sound.stop(background_music)
                 pygame.mixer.Sound.play(game_win_sound)
                 self.game_over = True
@@ -141,12 +140,17 @@ class SnakeGame:
 
 class GameMenu:
     def __init__(self):
-        self.menu_font = pygame.font.SysFont(None, 60)
-        self.button_font = pygame.font.SysFont(None, 40)
+        self.menu_font = pygame.font.Font('font/Pixeltype.ttf', 60)
+        self.button_font = pygame.font.Font('font/Pixeltype.ttf', 40)
+        self.background_image = pygame.image.load('assists/start_page.png')
+        self.background_image = pygame.transform.scale(self.background_image, (screen_width, screen_height))
 
     def show_menu(self):
         start_button_rect = pygame.Rect(screen_width // 2 - 75, 300, 150, 50)
         exit_button_rect = pygame.Rect(screen_width // 2 - 75, 375, 150, 50)
+
+        start_button_alpha = 100  
+        exit_button_alpha = 100  
 
         while True:
             for event in pygame.event.get():
@@ -163,32 +167,36 @@ class GameMenu:
                         pygame.quit()
                         sys.exit()
 
-            game_display.fill(BLACK)
-            game_display.blit(background_image, (0, 0))
+            game_display.blit(self.background_image, (0, 0))
 
-            title_text = self.menu_font.render("Snake Game", True, snake_color)
-            game_display.blit(title_text, (screen_width // 2 - title_text.get_width() // 2, 150))
 
+
+            start_button_surf = pygame.Surface((start_button_rect.width, start_button_rect.height), pygame.SRCALPHA)
+            start_button_surf.fill((0, 255, 0, start_button_alpha))
+            game_display.blit(start_button_surf, start_button_rect)
             start_button_text = self.button_font.render("Start", True, BLACK)
-            pygame.draw.rect(game_display, snake_color, start_button_rect)
             game_display.blit(start_button_text, (screen_width // 2 - start_button_text.get_width() // 2, 310))
 
+            exit_button_surf = pygame.Surface((exit_button_rect.width, exit_button_rect.height), pygame.SRCALPHA)
+            exit_button_surf.fill((255, 0, 0, exit_button_alpha))
+            game_display.blit(exit_button_surf, exit_button_rect)
             exit_button_text = self.button_font.render("Exit", True, BLACK)
-            pygame.draw.rect(game_display, snake_color, exit_button_rect)
             game_display.blit(exit_button_text, (screen_width // 2 - exit_button_text.get_width() // 2, 385))
 
             pygame.display.update()
             clock.tick(60)
 
-    def show_level_selection(self):
-        level_buttons = []
-        level_buttons.append(pygame.Rect(screen_width // 2 - 75, 250, 150, 50))
-        level_buttons.append(pygame.Rect(screen_width // 2 - 75, 325, 150, 50))
-        level_buttons.append(pygame.Rect(screen_width // 2 - 75, 400, 150, 50))
 
-        level_texts = [self.button_font.render("Easy", True, BLACK),
-                       self.button_font.render("Medium", True, BLACK),
-                       self.button_font.render("Hard", True, BLACK)]
+ 
+    def show_level_selection(self):
+
+        easy_button_rect = pygame.Rect(screen_width // 2 - 100, 275, 200, 50)
+        medium_button_rect = pygame.Rect(screen_width // 2 - 100, 350, 200, 50)
+        hard_button_rect = pygame.Rect(screen_width // 2 - 100, 425, 200, 50)
+
+        easy_button_alpha = 100
+        medium_button_alpha = 100
+        hard_button_alpha = 100
 
         while True:
             for event in pygame.event.get():
@@ -198,24 +206,55 @@ class GameMenu:
                     sys.exit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = pygame.mouse.get_pos()
-                    for i in range(3):
-                        if level_buttons[i].collidepoint(mouse_pos):
-                            pygame.mixer.Sound.stop(background_music)
-                            snake_game = SnakeGame(i)  # Pass the selected level as an argument
-                            snake_game.start_game()
+                    if easy_button_rect.collidepoint(mouse_pos):
+                        self.start_game(1)
+                    elif medium_button_rect.collidepoint(mouse_pos):
+                        self.start_game(2)
+                    elif hard_button_rect.collidepoint(mouse_pos):
+                        self.start_game(3)
 
-            game_display.fill(BLACK)
-            game_display.blit(background_image, (0, 0))
+            game_display.blit(self.background_image, (0, 0))
 
-            level_text = self.menu_font.render("Select Level:", True, snake_color)
-            game_display.blit(level_text, (screen_width // 2 - level_text.get_width() // 2, 150))
+            mouse_pos = pygame.mouse.get_pos()
 
-            for i in range(3):
-                pygame.draw.rect(game_display, snake_color, level_buttons[i])
-                game_display.blit(level_texts[i], (screen_width // 2 - level_texts[i].get_width() // 2, 260 + i * 75))
+            if easy_button_rect.collidepoint(mouse_pos):
+                easy_button_alpha = 255
+            else:
+                easy_button_alpha = 100
+
+            if medium_button_rect.collidepoint(mouse_pos):
+                medium_button_alpha = 255
+            else:
+                medium_button_alpha = 100
+
+            if hard_button_rect.collidepoint(mouse_pos):
+                hard_button_alpha = 255
+            else:
+                hard_button_alpha = 100
+
+            easy_button_surf = pygame.Surface((200, 50), pygame.SRCALPHA)
+            medium_button_surf = pygame.Surface((200, 50), pygame.SRCALPHA)
+            hard_button_surf = pygame.Surface((200, 50), pygame.SRCALPHA)
+            pygame.draw.rect(easy_button_surf, (255, 255, 255, easy_button_alpha), easy_button_surf.get_rect(), border_radius=15)
+            pygame.draw.rect(medium_button_surf, (255, 255, 255, medium_button_alpha), medium_button_surf.get_rect(), border_radius=15)
+            pygame.draw.rect(hard_button_surf, (255, 255, 255, hard_button_alpha), hard_button_surf.get_rect(), border_radius=15)
+            game_display.blit(easy_button_surf, easy_button_rect)
+            game_display.blit(medium_button_surf, medium_button_rect)
+            game_display.blit(hard_button_surf, hard_button_rect)
+
+            easy_button_text = self.button_font.render("Easy", True, (0, 0, 0))
+            medium_button_text = self.button_font.render("Medium", True, (0, 0, 0))
+            hard_button_text = self.button_font.render("Hard", True, (0, 0, 0))
+
+            game_display.blit(easy_button_text, (screen_width // 2 - 40, 285))
+            game_display.blit(medium_button_text, (screen_width // 2 - 40, 360))
+            game_display.blit(hard_button_text, (screen_width // 2 - 40, 435))
 
             pygame.display.update()
-            clock.tick(60)
+
+    def start_game(self, level):
+        game = SnakeGame(level)
+        game.start_game()
 
 menu = GameMenu()
 menu.show_menu()
