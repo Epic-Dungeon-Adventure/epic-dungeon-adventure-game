@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./css/index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <script type="text/javascript" src="/eel.js"></script>
+</head>
+
+<body>
+
+  <nav>
+    <img id="logo" src="./images/logo.png" alt="logo">
+    <h2 id="hlogo">UNLEASH YOUR INNER HERO</h2>
+    <img src="./images/naav.png" alt="nav" id="nav">
+    <!-- <a id="team" href="" target="_blank">Team</a> -->
+    <div id="nd">
+      <h1 id="libname">Nexus World</h1>
+      <p id="libdescription">
+        In every game,
+        there is a strategy.
+        To win,<br>you have to plan,
+        adapt, and make bold moves
+      </p>
+    </div>
+  </nav>
+
+  <div id="lib">
+    <!-- <input type="text" id="searchBox" placeholder="Search "> -->
+    <div class="mainscroll">
+      <div id="arrowup">
+        <button class="arrow" class="icon" onclick="scrollUp()">
+          <img id="sup" src="./images/sup.png" alt="Arrow Up">
+        </button>
+      </div>
+
+      <div id="wrapper">
+        <div id="gameslist" style="overflow-y: auto; max-height: 520px;">
+          <!-- GAMES -->
+          <!-- game1 -->
+          <div class="scroll">
+            <button class="gamesb" id="game1">
+              <img class="gameimg" src="./images/11.jpeg" alt="game1">
+            </button>
+          </div>
+          <div class="scroll">
+            <button  class="gamesb" id="game2">
+              <img class="gameimg" src="./images/g3.jpg" alt="game2">
+            </button>
+          </div>
+          <div class="scroll">
+            <button  class="gamesb" id="game3">
+              <img class="gameimg" src="./images/g4.jpg" alt="game3">
+            </button>
+          </div>
+          <div class="scroll">
+            <button class="gamesb"  id="game4">
+              <img class="gameimg" src="./images/g5.jpg" alt="game4">
+            </button>
+          </div>
+          <div class="scroll">
+            <button class="gamesb"  id="game5">
+              <img class="gameimg" src="./images/g6.jpg" alt="game5">
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <h2 id="ttt" style="color: red;"></h2>
+
+      <div id="arrowdown">
+        <button class="arrow" onclick="scrollDown()">
+          <img id="sdown" src="./images/sdown.png" alt="Arrow Up">
+        </button>
+        <img src="./images/BOY.png" id="boy" alt="player">
+
+        <div id="most1">
+          <p id="the">The </p>
+          <p id="pop">Game Library </p>
+          <div id="line"></div>
+          <br>
+          <br>
+          <br>
+        </div>
+
+      </div>
+    </div>
+  </div>
+<h1 id="ttt"></h1>
+  <!-- Button1 -->
+  <!-- Hidden div to be displayed on button click -->
+  <div class="gamedwindow" id="game1Details" style="display: none;">
+  <button class="back" id="backButton">
+<img src="./images/back2.png" >
+  </button>
+  <div class="gamew2">
+    <img class="imgw2" src="./images/wpic.png" alt="Game 1 Details">
+    <p class="pgame2">Venture through perilous dungeons, battling monsters and solving puzzles,</br>
+    on a desperate quest to find the cure and save humanity.</p>
+    <button class="play" id="playButton">Start game</button>
+    <button id="tut">Watch Tutorial</button>
+
+  </div>
+  </div>
+
+  <script>
+    // Get references to the buttons
+    var game1Button = document.getElementById('game1');
+    var game1Details = document.getElementById('game1Details');
+    var backButton = document.getElementById('backButton');
+
+    // Add event listener to the game1Button
+    game1Button.addEventListener('click', function() {
+      game1Details.style.display = 'block'; // Show the game1Details div
+    });
+
+    // Add event listener to the backButton
+    backButton.addEventListener('click', function() {
+      game1Details.style.display = 'none'; // Hide the game1Details div
+    });
+  </script>
+
+
+<!-- videooo -->
+<div id="vtut"style="display: none;">
+  <button class="back" id="backButtontut">
+<img src="./images/back2.png" >
+  </button>
+ <video   id="vtut2" controls >
+
+    <source src="./images/dungeontut.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
+
+<script>
+    // Get references to the buttons
+
+    var backButtont = document.getElementById('backButtontut');
+    var tutbutton= document.getElementById('tut');
+    var tutvideo= document.getElementById ('vtut')
+    // Add event listener to the game1Button
+    tutbutton.addEventListener('click', function() {
+     tutvideo.style.display = 'block'; // Show the game1Details div
+    });
+
+    // Add event listener to the backButton
+    backButtont.addEventListener('click', function() {
+     tutvideo.style.display = 'none'; // Hide the game1Details div
+    });
+  </script>
+
+
+
+
+
+<!-- videooo -->
+
+
+
+ <!-- Button2 -->
+  <!-- Hidden div to be displayed on button click -->
+  <div class="gamedwindow" id="game2Details" style="display: none;">
+   <button class="back" id="backButton2">
+<img src="./images/back2.png" >
+  </button>
+  <div class="gamew2">
+    <img  class="imgw2" src="./images/game1-details.jpg" alt="Game 2 Details">
+    <p  class="pgame2" > Description</p>
+    <button  class="play"  id="playButton2">Play</button>
+
+  </div>
+</div>
+  <script>
+    // Get references to the buttons
+    var game2Button = document.getElementById('game2');
+    var game2Details = document.getElementById('game2Details');
+    var backButton2 = document.getElementById('backButton2');
+
+    // Add event listener to the game1Button
+    game2Button.addEventListener('click', function() {
+      game2Details.style.display = 'block'; // Show the game1Details div
+    });
+
+    // Add event listener to the backButton
+    backButton2.addEventListener('click', function() {
+      game2Details.style.display = 'none'; // Hide the game1Details div
+    });
+  </script>
+
+<!-- Button3 -->
+  <!-- Hidden div to be displayed on button click -->
+  <div  class="gamedwindow" id="game3Details" style="display: none;">
+   <button class="back" id="backButton3">
+<img src="./images/back2.png" >
+  </button>
+  <div class="gamew2">
+    <img  class="imgw2" src="./images/game1-details.jpg" alt="Game3 Details">
+    <p  class="pgame2">Description</p>
+    <button  class="play" id="playButton3">Play</button>
+
+  </div>
+</div>
+  <script>
+    // Get references to the buttons
+    var game3Button = document.getElementById('game3');
+    var game3Details = document.getElementById('game3Details');
+    var backButton3 = document.getElementById('backButton3');
+
+    // Add event listener to the game1Button
+    game3Button.addEventListener('click', function() {
+      game3Details.style.display = 'block'; // Show the game1Details div
+    });
+
+    // Add event listener to the backButton
+    backButton3.addEventListener('click', function() {
+      game3Details.style.display = 'none'; // Hide the game1Details div
+    });
+  </script>
+
+
+
+
+<!-- Button4-->
+  <!-- Hidden div to be displayed on button click -->
+  <div  class="gamedwindow" id="game4Details" style="display: none;">
+   <button class="back" id="backButton4">
+<img src="./images/back2.png" >
+  </button>
+  <div class="gamew2">
+    <img  class="imgw2"  src="./images/game1-details.jpg" alt="Game 4 Details">
+    <p  class="pgame2" > Description</p>
+    <button class="play" id="playButton4">Play</button>
+
+  </div>
+</div>
+  <script>
+    // Get references to the buttons
+    var game4Button = document.getElementById('game4');
+    var game4Details = document.getElementById('game2Details');
+    var backButton4 = document.getElementById('backButton4');
+
+    // Add event listener to the game1Button
+    game4Button.addEventListener('click', function() {
+      game4Details.style.display = 'block'; // Show the game1Details div
+    });
+
+    // Add event listener to the backButton
+    backButton4.addEventListener('click', function() {
+      game4Details.style.display = 'none'; // Hide the game1Details div
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  <!-- js---- -->
+  <script>
+    function scrollUp() {
+      var up = document.querySelector("#gameslist");
+      up.scrollTop -= 350;
+    }
+
+    function scrollDown() {
+      var down = document.querySelector("#gameslist");
+      down.scrollTop += 350;
+    }
+
+    // -------search
+    document.getElementById('searchBox').addEventListener('input', function() {
+      var searchValue = this.value.toLowerCase();
+      var links = document.querySelectorAll('#gameslist a');
+      for (var i = 0; i < links.length; i++) {
+        var link = links[i];
+        var linkId = link.id.toLowerCase();
+        if (linkId.includes(searchValue)) {
+          link.style.display = 'block';
+        } else {
+          link.style.display = 'none';
+        }
+      }
+    });
+
+    //gamesbuttons
+    var gameLink = document.getElementById('game1');
+    var gameButtons = document.getElementById('gameButtons');
+
+    gameLink.addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent the link from navigating
+
+      // Toggle the visibility of the buttons
+      gameButtons.style.display = (gameButtons.style.display === 'none') ? 'block' : 'none';
+    });
+  </script>
+</body>
+
+</html>
