@@ -375,3 +375,67 @@ margin-top:-700px ;
   box-shadow: 0 0 10px rgba(233, 233, 233, 0.918);
 border-radius: 10px;
 }
+
+/* responsive */
+@media only screen and (max-width: 768px) {
+  #nav {
+    height: 50px;
+  }
+
+  #hlogo {
+    font-size: 14px;
+    margin-top: 7px;
+  }
+
+  #logo {
+    width: 40px;
+    margin-top: 5px;
+    margin-left: 5px;
+  }
+
+  #libname {
+    font-size: 60px;
+  }
+
+  #libdescription {
+    margin-top: -40px;
+    font-size: 16px;
+  }
+
+  #nd {
+    margin-left: 100px;
+    margin-top: -50px;
+  }
+
+  #lib {
+    margin-top: 150px;
+    margin-bottom: 60px;
+  }
+
+  #gameslist img {
+    height: 150px;
+    width: 150px;
+    padding: 5px;
+    margin-bottom: 12px;
+  }
+
+  .play {
+    width: 150px;
+    padding: 8px;
+    font-size: 18px;
+    margin-top: 40px;
+    margin-left: 60px;
+  }
+
+  #tut {
+    width: 100px;
+    padding: 8px;
+    font-size: 18px;
+    margin-left: 5px;
+  }
+
+  .pgame2 {
+    font-size: 18px;
+    margin-left: 5px;
+  }
+}
