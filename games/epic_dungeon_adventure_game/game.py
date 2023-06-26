@@ -14,7 +14,7 @@ clock = pygame.time.Clock()
 animations = get_animations()
 game_state = "walk"
 
-head = Entity(animations['ice_boss']['idle'])
+head = Entity(animations['boss']['idle'])
 head.animate(animations['ice_boss']['attack'])
 head_group = pygame.sprite.Group()
 head_group.add(head)
