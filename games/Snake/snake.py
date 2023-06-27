@@ -50,7 +50,7 @@ class SnakeGame:
         self.food_color = random.choice(food_colors) 
         self.game_over = False
         self.game_won = False
-
+        self.button_font = pygame.font.Font('font/Pixeltype.ttf', 40)
     def start_game(self):
         pygame.mixer.Sound.play(background_music, loops=-1)
 
@@ -81,11 +81,68 @@ class SnakeGame:
             self.update_display()
             self.clock_tick()
 
+    # ...
+
+    def display_game_over(self):
+            game_over_font = pygame.font.Font('font/Pixeltype.ttf', 80)
+            game_over_text = game_over_font.render("Game Over", True, (255, 255, 255))
+            game_display.blit(game_over_text, (screen_width // 2 - game_over_text.get_width() // 2, 200))
+
+            # Render start button
+            start_button_rect = pygame.Rect(screen_width // 2 - 75, 300, 150, 50)
+            pygame.draw.rect(game_display, (0, 255, 0), start_button_rect)
+            start_button_text = self.button_font.render("Start", True, BLACK)
+            game_display.blit(start_button_text, (screen_width // 2 - start_button_text.get_width() // 2, 310))
+
+            # Render exit button
+            exit_button_rect = pygame.Rect(screen_width // 2 - 75, 375, 150, 50)
+            pygame.draw.rect(game_display, (255, 0, 0), exit_button_rect)
+            exit_button_text = self.button_font.render("Exit", True, BLACK)
+            game_display.blit(exit_button_text, (screen_width // 2 - exit_button_text.get_width() // 2, 385))
+
+            pygame.display.update()
+
+            self.handle_game_over_input(start_button_rect, exit_button_rect)
+
+    def handle_game_over_input(self, start_button_rect, exit_button_rect):
+            while True:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.mixer.Sound.stop(background_music)
+                        pygame.quit()
+                        sys.exit()
+                    elif event.type == pygame.MOUSEBUTTONDOWN:
+                        mouse_pos = pygame.mouse.get_pos()
+                        if start_button_rect.collidepoint(mouse_pos):
+                            self.restart_game()
+                        elif exit_button_rect.collidepoint(mouse_pos):
+                            pygame.mixer.Sound.stop(background_music)
+                            pygame.quit()
+                            sys.exit()
+
+                pygame.display.update()
+                clock.tick(60)
+
+    def restart_game(self):
+        # Reset game variables and start a new game
+        self.snake_length = 1
+        self.x1 = screen_width / 2
+        self.y1 = screen_height / 2
+        self.x1_change = 0
+        self.y1_change = 0
+        self.snake_list = []
+        self.food_x = round(random.randrange(0, screen_width - self.snake_block_size) / 20.0) * 20.0
+        self.food_y = round(random.randrange(0, screen_height - self.snake_block_size) / 20.0) * 20.0
+        self.food_color = random.choice(food_colors)
+        self.game_over = False
+        self.game_won = False
+
+        self.start_game()
     def check_collision(self):
         if self.x1 >= screen_width or self.x1 < 0 or self.y1 >= screen_height or self.y1 < 0:
             pygame.mixer.Sound.stop(background_music)
             pygame.mixer.Sound.play(game_over_sound)
-            self.game_over = True
+            self.display_game_over()
 
         self.snake_head = []
         self.snake_head.append(self.x1)
@@ -99,7 +156,7 @@ class SnakeGame:
             if segment == self.snake_head:
                 pygame.mixer.Sound.stop(background_music)
                 pygame.mixer.Sound.play(game_over_sound)
-                self.game_over = True
+                self.display_game_over()
 
         if self.x1 == self.food_x and self.y1 == self.food_y:
             pygame.mixer.Sound.set_volume(background_music, 0.2)
@@ -107,14 +164,15 @@ class SnakeGame:
             self.snake_length += 1
             self.food_x = round(random.randrange(0, screen_width - self.snake_block_size) / 20.0) * 20.0
             self.food_y = round(random.randrange(0, screen_height - self.snake_block_size) / 20.0) * 20.0
-            self.food_color = random.choice(food_colors)  
+            self.food_color = random.choice(food_colors)
             pygame.mixer.Sound.set_volume(background_music, 0.5)
 
-            if self.snake_length - 1 >= self.target_length: 
+            if self.snake_length - 1 >= self.target_length:
                 pygame.mixer.Sound.stop(background_music)
                 pygame.mixer.Sound.play(game_win_sound)
-                self.game_over = True
-                self.game_won = True
+                self.display_game_over()
+            self.game_won = True
+
 
     def update_display(self):
         game_display.fill(BLACK)
