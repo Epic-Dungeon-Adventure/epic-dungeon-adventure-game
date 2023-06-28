@@ -39,7 +39,9 @@ def get_animations():
     knight_walk = Animation(path_list, 300, 200)
     animations['main character']['idle'] = knight_walk.farme_list
 
-
+    path_list=['./games/epic_dungeon_adventure_game/assets/wizzard/Magic_sphere_Fire/tile'+str(num)+'.png' for num in range(0,16)]
+    knight_walk = Animation(path_list, 300, 200)
+    animations['main character']['fire sphere'] = knight_walk.farme_list
 
 
 
@@ -83,15 +85,15 @@ def get_animations():
     path_list = ['games/epic_dungeon_adventure_game/assets/demon_boss/take_hit/demon_take_hit_' + str(num) + '.png' for num in range(1,6)]
     ice_death = Animation(path_list, 400, 400)
     animations['demon boss']['take hit'] = ice_death.farme_list
-    
-    
 
 
 
 
-    path_list = ['games/epic_dungeon_adventure_game/assets/spells/water/tile' + str(num) + '.png' for num in range(1,21)]
+
+
+    path_list = ['games/epic_dungeon_adventure_game/assets/spells/water_heavy/tile' + str(num) + '.png' for num in range(1,21)]
     ice_death = Animation(path_list, 400, 400)
-    animations['water heavy']['start'] = ice_death.farme_list
+    animations['water heavy']['repeat'] = ice_death.farme_list
 
     # Dark_Woods
     # path_list=['./games/epic_dungeon_adventure_game/assets/Dark_Woods/evil_wizard/Idle/Idle'+str(num)+'.png' for num in range(1,9)]

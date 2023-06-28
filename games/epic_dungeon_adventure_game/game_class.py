@@ -20,12 +20,12 @@ levels = {
 }
 
 spells = {
-   pygame.K_1:('water heavy','start'),
+   pygame.K_1:('water heavy','repeat'),
    pygame.K_2:('water light','start'),
 }
 
 spell_flow = {
-    ('water heavy','start'):('water heavy','start'),
+    ('water heavy','repeat'):None,
     ('water light','start'):('water light','start'),
 }
 
@@ -37,7 +37,7 @@ class Game:
         self.screen = screen
         self.user = Entity(animations["main character"]["idle"], 250)
         self.monster = Entity(animations["ice boss"]["idle"], 20)
-        self.spell = Entity(animations['water heavy']['start'])
+        self.spell = Entity(animations['water heavy']['repeat'])
 
         self.event_box = Entity([pygame.Surface((50, 50))])
         self.event_box.image.fill("white")
@@ -55,7 +55,7 @@ class Game:
         self.monster_attacked = False
         self.ground_hight = 10
         self.current_spell = False
-        self.spell_movement = 1
+        self.spell_movement = 0
 
         self.backgrounds = [Terrain(levels[self.level]["background"][0]+str(num)+".png", 1600, 800, (0,0),num / 3) for num in range(1,levels[self.level]["background"][1])]
 
@@ -74,8 +74,8 @@ class Game:
                 self.user_attacked = True
                 self.user.animate(animations["main character"]["attack"], True, True)
                 self.spell = Entity(animations[spells[key][0]][spells[key][1]])
-                self.spell.rect.bottomleft = self.user.rect.bottomleft
                 self.current_spell = spells[key]
+                # self.spell.rect.bottomleft = self.user.rect.bottomleft
 
     def event_box_collision(self):
         self.state = "tell story"
@@ -105,7 +105,6 @@ class Game:
 
         if self.user.animation_complete and self.user_attacked:
             self.group.add(self.spell)
-
             if self.spell.rect.colliderect(self.monster.rect):
                 self.spell.animate(animations[spell_flow[self.current_spell][0]][spell_flow[self.current_spell][1]],True,True,False,True)
                 if self.monster.take_damage(10) <= 0:
@@ -170,7 +169,7 @@ class Game:
         
         self.monster.update()
         self.monster.rect.bottomleft = (1000, 800 - self.ground_hight)
-        # self.spell.rect.bottomleft = self.user.rect.bottomleft
+        self.spell.rect.bottomleft = self.monster.rect.bottomleft
         self.spell.rect.x += self.spell_movement
         self.spell.update()
         self.spell.image.set_alpha(150)
