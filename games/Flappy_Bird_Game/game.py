@@ -73,7 +73,7 @@ pygame.mixer.pre_init(frequency=44100, size=16, channels=1, buffer=512)
 pygame.init()
 screen = pygame.display.set_mode((288, 512))
 clock = pygame.time.Clock()
-game_font = pygame.font.Font('C:/Users/DC/epic-dungeon-adventure-game/epic-dungeon-adventure-game/games/Flappy_Bird_Game/assets/04B_19.TTF', 30)
+game_font = pygame.font.Font('games/Flappy_Bird_Game/font/04B_19.TTF', 30)
 
 # Game variables
 gravity = 0.25
@@ -83,21 +83,21 @@ score = 0
 high_score = 0
 
 # Load assets
-bg_surface = pygame.image.load('C:/Users/DC/epic-dungeon-adventure-game/epic-dungeon-adventure-game/games/Flappy_Bird_Game/assets/background-night.png').convert()
+bg_surface = pygame.image.load('games/Flappy_Bird_Game/assets/background-night.png').convert()
 bg_surface = pygame.transform.scale(bg_surface, (288, 512))
 
-floor_surface = pygame.image.load('C:/Users/DC/epic-dungeon-adventure-game/epic-dungeon-adventure-game/games/Flappy_Bird_Game/assets/base.png').convert()
+floor_surface = pygame.image.load('games/Flappy_Bird_Game/assets/base.png').convert()
 floor_x_pos = 0
 
-bird_downflap = pygame.image.load('C:/Users/DC/epic-dungeon-adventure-game/epic-dungeon-adventure-game/games/Flappy_Bird_Game/assets/redbird-downflap.png').convert_alpha()
-bird_midflap = pygame.image.load('C:/Users/DC/epic-dungeon-adventure-game/epic-dungeon-adventure-game/games/Flappy_Bird_Game/assets/redbird-midflap.png').convert_alpha()
-bird_upflap = pygame.image.load('C:/Users/DC/epic-dungeon-adventure-game/epic-dungeon-adventure-game/games/Flappy_Bird_Game/assets/redbird-upflap.png').convert_alpha()
+bird_downflap = pygame.image.load('games/Flappy_Bird_Game/bird/redbird_1.png').convert_alpha()
+bird_midflap = pygame.image.load('games/Flappy_Bird_Game/bird/redbird_2.png').convert_alpha()
+bird_upflap = pygame.image.load('games/Flappy_Bird_Game/bird/redbird_3.png').convert_alpha()
 bird_frames = [bird_downflap, bird_midflap, bird_upflap]
 bird_index = 0
 bird_surface = bird_frames[bird_index]
 bird_rect = bird_surface.get_rect(center=(100, 256))
 
-bird2_surface = pygame.image.load('C:/Users/DC/epic-dungeon-adventure-game/epic-dungeon-adventure-game/games/Flappy_Bird_Game/assets/parrot/Parrot_01.png').convert_alpha()  # Path to second bird image
+bird2_surface = pygame.image.load('games/Flappy_Bird_Game/assets/parrot/Parrot_1.png').convert_alpha()  # Path to second bird image
 bird2_width = 40  # Set the desired width for the second bird
 bird2_height = 30  # Set the desired height for the second bird
 bird2_surface = pygame.transform.scale(bird2_surface, (bird2_width, bird2_height))
@@ -106,7 +106,7 @@ bird2_x = 400  # Adjust the x-coordinate as per your needs
 bird2_y = random.randint(100, 300)  # Adjust the y-coordinate as per your needs
 bird2_rect = bird2_surface.get_rect(center=(bird2_x, bird2_y))
 
-bird3_surface = pygame.image.load('C:/Users/DC/epic-dungeon-adventure-game/epic-dungeon-adventure-game/games/Flappy_Bird_Game/assets/bird_3/bird_1.jpg').convert_alpha()  # Path to third bird image
+bird3_surface = pygame.image.load('games/Flappy_Bird_Game/assets/redbird/red_1.png').convert_alpha()  # Path to third bird image
 bird3_width = 40  # Set the desired width for the third bird
 bird3_height = 30  # Set the desired height for the third bird
 bird3_surface = pygame.transform.scale(bird3_surface, (bird3_width, bird3_height))
@@ -118,18 +118,18 @@ bird3_rect = bird3_surface.get_rect(center=(bird3_x, bird3_y))
 BIRDFLAP = pygame.USEREVENT + 1
 pygame.time.set_timer(BIRDFLAP, 200)
 
-pipe_surface = pygame.image.load('C:/Users/DC/epic-dungeon-adventure-game/epic-dungeon-adventure-game/games/Flappy_Bird_Game/assets/pipe-red.png').convert()
+pipe_surface = pygame.image.load('games/Flappy_Bird_Game/assets/pipe-red.png').convert()
 pipe_list = []
 SPAWNPIPE = pygame.USEREVENT
 pygame.time.set_timer(SPAWNPIPE, 1200)
 pipe_height = [200, 300, 350]
 
-game_over_surface = pygame.image.load('C:/Users/DC/epic-dungeon-adventure-game/epic-dungeon-adventure-game/games/Flappy_Bird_Game/assets/message.png').convert_alpha()
+game_over_surface = pygame.image.load('games/Flappy_Bird_Game/assets/message.png').convert_alpha()
 game_over_rect = game_over_surface.get_rect(center=(144, 256))
 
-flap_sound = pygame.mixer.Sound('C:/Users/DC/epic-dungeon-adventure-game/epic-dungeon-adventure-game/games/Flappy_Bird_Game/sound/sfx_wing.wav')
-death_sound = pygame.mixer.Sound('C:/Users/DC/epic-dungeon-adventure-game/epic-dungeon-adventure-game/games/Flappy_Bird_Game/sound/sfx_hit.wav')
-score_sound = pygame.mixer.Sound('C:/Users/DC/epic-dungeon-adventure-game/epic-dungeon-adventure-game/games/Flappy_Bird_Game/sound/sfx_point.wav')
+flap_sound = pygame.mixer.Sound('games/Flappy_Bird_Game/sound/sfx_wing.wav')
+death_sound = pygame.mixer.Sound('games/Flappy_Bird_Game/sound/sfx_hit.wav')
+score_sound = pygame.mixer.Sound('games/Flappy_Bird_Game/sound/sfx_point.wav')
 score_sound_countdown = 100
 
 running = True
