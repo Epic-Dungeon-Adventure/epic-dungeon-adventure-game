@@ -12,8 +12,17 @@ def get_animations():
         "Skeleton_Lighter":{},
         "ice boss":{},
         "demon boss":{},
-        "main character":{},
+        "main character":{
+            "heavy":{},
+            "light":{},
+                          },
+
         "water heavy":{},
+        "water light":{},
+        "electric heavy":{},
+        "electric light":{},
+        "fire heavy":{},
+        "fire light":{},
     }
 
 
@@ -26,10 +35,6 @@ def get_animations():
     path_list=['./games/epic_dungeon_adventure_game/assets/wizzard/dead/dead'+str(num)+'.png' for num in range(1,5)]
     knight_walk = Animation(path_list, 300, 200)
     animations['main character']['death'] = knight_walk.farme_list
-    
-    path_list=['./games/epic_dungeon_adventure_game/assets/wizzard/attack/attack'+str(num)+'.png' for num in range(1,8)]
-    knight_walk = Animation(path_list, 300, 200)
-    animations['main character']['attack'] = knight_walk.farme_list
 
     path_list=['./games/epic_dungeon_adventure_game/assets/wizzard/hurt/hurt'+str(num)+'.png' for num in range(1,5)]
     knight_walk = Animation(path_list, 300, 200)
@@ -39,15 +44,41 @@ def get_animations():
     knight_walk = Animation(path_list, 300, 200)
     animations['main character']['idle'] = knight_walk.farme_list
 
-    path_list=['./games/epic_dungeon_adventure_game/assets/wizzard/Magic_sphere_Fire/tile'+str(num)+'.png' for num in range(0,16)]
-    knight_walk = Animation(path_list, 300, 200)
-    animations['main character']['fire sphere'] = knight_walk.farme_list
 
+
+
+    path_list=['./games/epic_dungeon_adventure_game/assets/wizzard/heavy_water/tile'+str(num).zfill(3)+'.png' for num in range(0,7)]
+    knight_walk = Animation(path_list, 300, 200)
+    animations['main character']["heavy"]["water"] = knight_walk.farme_list
+
+    path_list=['./games/epic_dungeon_adventure_game/assets/wizzard/light_water/tile'+str(num).zfill(3)+'.png' for num in range(0,16)]
+    knight_walk = Animation(path_list, 300, 200)
+    animations['main character']["light"]["water"] = knight_walk.farme_list
+
+
+
+    path_list=['./games/epic_dungeon_adventure_game/assets/wizzard/heavy_fire/tile'+str(num).zfill(3)+'.png' for num in range(0,7)]
+    knight_walk = Animation(path_list, 300, 200)
+    animations['main character']["heavy"]["fire"] = knight_walk.farme_list
+
+    path_list=['./games/epic_dungeon_adventure_game/assets/wizzard/light_fire/tile'+str(num).zfill(3)+'.png' for num in range(0,16)]
+    knight_walk = Animation(path_list, 300, 200)
+    animations['main character']["light"]["fire"] = knight_walk.farme_list
+
+
+
+    path_list=['./games/epic_dungeon_adventure_game/assets/wizzard/heavy_electric/tile'+str(num).zfill(3)+'.png' for num in range(0,7)]
+    knight_walk = Animation(path_list, 300, 200)
+    animations['main character']["heavy"]["electric"] = knight_walk.farme_list
+
+    path_list=['./games/epic_dungeon_adventure_game/assets/wizzard/light_electric/tile'+str(num).zfill(3)+'.png' for num in range(0,16)]
+    knight_walk = Animation(path_list, 300, 200)
+    animations['main character']["light"]["electric"] = knight_walk.farme_list
 
 
 
     path_list = ['games/epic_dungeon_adventure_game/assets/ice_boss/idle/idle_' + str(num) + '.png' for num in range(1,7)]
-    ice_death = Animation(path_list, 400, 400)
+    ice_death = Animation(path_list, 300, 300)
     animations['ice boss']['idle'] =ice_death.farme_list
 
 
@@ -91,9 +122,62 @@ def get_animations():
 
 
 
-    path_list = ['games/epic_dungeon_adventure_game/assets/spells/water_heavy/tile' + str(num) + '.png' for num in range(1,21)]
+    path_list = ['games/epic_dungeon_adventure_game/assets/spells/heavy_water/tile' + str(num) + '.png' for num in range(1,21)]
     ice_death = Animation(path_list, 400, 400)
     animations['water heavy']['repeat'] = ice_death.farme_list
+
+    path_list = ['games/epic_dungeon_adventure_game/assets/spells/light_water/start/tile' + str(num) + '.png' for num in range(0,4)]
+
+    ice_death = Animation(path_list, 200, 200)
+    animations['water light']['start'] = ice_death.farme_list
+
+    path_list = ['games/epic_dungeon_adventure_game/assets/spells/light_water/repeat/tile' + str(num) + '.png' for num in range(4,21)]
+    ice_death = Animation(path_list, 200, 200)
+    animations['water light']['repeat'] = ice_death.farme_list
+
+    path_list = ['games/epic_dungeon_adventure_game/assets/spells/light_water/end/tile' + str(num) + '.png' for num in range(0,15)]
+    ice_death = Animation(path_list, 200, 200)
+    animations['water light']['end'] = ice_death.farme_list
+
+
+
+
+    path_list = ['games/epic_dungeon_adventure_game/assets/spells/heavy_fire/tile' + str(num).zfill(3) + '.png' for num in range(0,18)]
+    ice_death = Animation(path_list, 400, 400)
+    animations['fire heavy']['repeat'] = ice_death.farme_list
+
+    path_list = ['games/epic_dungeon_adventure_game/assets/spells/light_fire/start/tile' + str(num).zfill(3) + '.png' for num in range(0,7)]
+
+    ice_death = Animation(path_list, 200, 200)
+    animations['fire light']['start'] = ice_death.farme_list
+
+    path_list = ['games/epic_dungeon_adventure_game/assets/spells/light_fire/repeat/tile' + str(num).zfill(3) + '.png' for num in range(0,4)]
+    ice_death = Animation(path_list, 200, 200)
+    animations['fire light']['repeat'] = ice_death.farme_list
+
+    path_list = ['games/epic_dungeon_adventure_game/assets/spells/light_fire/end/tile' + str(num).zfill(3) + '.png' for num in range(0,14)]
+    ice_death = Animation(path_list, 400, 400)
+    animations['fire light']['end'] = ice_death.farme_list
+
+
+
+
+    path_list = ['games/epic_dungeon_adventure_game/assets/spells/heavy_electric/tile' + str(num).zfill(3) + '.png' for num in range(0,12)]
+    ice_death = Animation(path_list, 400, 400)
+    animations['electric heavy']['repeat'] = ice_death.farme_list
+
+    path_list = ['games/epic_dungeon_adventure_game/assets/spells/light_electric/start/tile' + str(num).zfill(3) + '.png' for num in range(0,8)]
+
+    ice_death = Animation(path_list, 200, 200)
+    animations['electric light']['start'] = ice_death.farme_list
+
+    path_list = ['games/epic_dungeon_adventure_game/assets/spells/light_electric/repeat/tile' + str(num).zfill(3) + '.png' for num in range(8,16)]
+    ice_death = Animation(path_list, 200, 200)
+    animations['electric light']['repeat'] = ice_death.farme_list
+
+    path_list = ['games/epic_dungeon_adventure_game/assets/spells/light_electric/end/tile' + str(num).zfill(3) + '.png' for num in range(0,5)]
+    ice_death = Animation(path_list, 200, 200)
+    animations['electric light']['end'] = ice_death.farme_list
 
     # Dark_Woods
     # path_list=['./games/epic_dungeon_adventure_game/assets/Dark_Woods/evil_wizard/Idle/Idle'+str(num)+'.png' for num in range(1,9)]

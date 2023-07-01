@@ -5,7 +5,7 @@ pygame.display.set_mode((1600, 800))
 
 
 class Entity(pygame.sprite.Sprite):
-    def __init__(self, default_animation, health=0, size=None):
+    def __init__(self, default_animation, health=0, size=None, default_speed = 0.1):
         super().__init__()
         self.health = health
         self.default_animation = default_animation
@@ -15,7 +15,8 @@ class Entity(pygame.sprite.Sprite):
             self.image = pygame.transform.scale(self.image, size)
         self.rect = self.image.get_rect()
         self.animation_index = 0 
-        self.animation_speed = 0.1
+        self.animation_speed = default_speed
+        self.default_speed = default_speed
         self.animation_complete = True
         self.loop = False
         self.kill_after_animation = False
@@ -31,6 +32,7 @@ class Entity(pygame.sprite.Sprite):
             if self.loop == False:
                 self.animation_index = 0
                 self.current_animation = self.default_animation
+                self.animation_speed = self.default_speed
             if self.kill_after_animation == True:
                 self.kill()
         self.image = self.current_animation[
@@ -40,10 +42,11 @@ class Entity(pygame.sprite.Sprite):
         self.rect.x = x_pos
         self.rect.y = y_pos
 
-    def animate(self, image_list, reset_index=False, reset_completion=False, loop=False, kill = False):
+    def animate(self, image_list, reset_index=False, reset_completion=False, loop=False, kill = False, speed = 0.1):
         self.current_animation = image_list
         self.loop = loop
         self.kill_after_animation = kill
+        self.animation_speed = speed
         if reset_completion == True:
             self.animation_complete = False
         if reset_index == True:
