@@ -28,11 +28,29 @@ spells = {
    pygame.K_6:('electric light'),
 }
 
+monsters = {
+"ice boss":{
+    "attack":{
+        "spell":"water light",
+        "trigger_percentage":10,
+        "send_percentage":50,
+        },
+},
+"demon boss":{
+      "attack":{
+        "spell":"fire light",
+        "trigger_percentage":10,
+        "send_percentage":50,
+        },
+},
+}
+
 animation_settings = {
     ("water heavy"):{
         "repeat speed":0.2,
         "element":"water",
         "trigger_percentage":90,
+        "hurt_percentage":50,
     },
 
     ("water light"):{
@@ -40,13 +58,15 @@ animation_settings = {
         "repeat speed":0.5,
         "end speed":0.3,
         "element":"water",
-        "trigger_percentage":100,
+        "trigger_percentage":50,
+        "hurt_percentage":20,
     },
 
     ("fire heavy"):{
         "repeat speed":0.12,
         "element":"fire",
         "trigger_percentage":90,
+        "hurt_percentage":50,
     },
 
     ("fire light"):{
@@ -54,13 +74,15 @@ animation_settings = {
         "repeat speed":0.5,
         "end speed":0.4,
         "element":"fire",
-        "trigger_percentage":100,
+        "trigger_percentage":50,
+        "hurt_percentage":20,
     },
 
     ("electric heavy"):{
         "repeat speed":0.09,
         "element":"electric",
         "trigger_percentage":90,
+        "hurt_percentage":50,
     },
 
     ("electric light"):{
@@ -68,7 +90,8 @@ animation_settings = {
         "repeat speed":0.2,
         "end speed":0.15,
         "element":"electric",
-        "trigger_percentage":100,
+        "trigger_percentage":50,
+        "hurt_percentage":20,
     },
     
 }
@@ -101,6 +124,7 @@ class Game:
         self.current_spell = False
         self.spell_movement = 0
         self.spell_started = False
+        self.spell_ended = False
 
         self.backgrounds = [Terrain(levels[self.level]["background"][0]+str(num)+".png", 1600, 800, (0,0),num / 3) for num in range(1,levels[self.level]["background"][1])]
 
@@ -154,7 +178,8 @@ class Game:
 
     def user_turn(self):
         if self.text_box == None:
-            text = "1 attack 10 damage \n \n 2 attack 30 damage \n \n 3 heal potion"
+            text = "1 heavy water spell 30 damage        2 light water spell 10 damage \n \n 3 heavy fire spell 30 damage        "
+            text += "4 light fire spell 10 damage \n \n 5 heavy electric spell 30 damage        6 light electric spell 10 damage"
             self.create_text_box(text)
 
         self.get_user_attack()
@@ -166,29 +191,38 @@ class Game:
                     self.spell.animate(animations[self.current_spell]['start'],True,True,speed=animation_settings[self.current_spell]["start speed"])
                     self.spell_started = True
                     self.spell.rect.midleft = self.user.rect.midright
+                
                 if self.spell.animation_complete and self.spell_started:
                     self.spell_movement = 5
 
-                if 'heavy' in self.current_spell:
+
+
+                if 'heavy' in self.current_spell and not self.spell_started:
                     self.spell.rect.bottomleft = self.monster.rect.bottomleft
                     self.spell.animation_index = 0
+                    self.spell.animation_complete = False
+                    self.spell_started = True
 
-                if self.spell.rect.colliderect(self.monster.rect):
+                if self.spell.rect.x >= self.monster.rect.x - self.spell_movement:
                     if not 'heavy' in self.current_spell:
-                        self.spell.animate(animations[self.current_spell]['end'], True, True, kill=True,speed=animation_settings[self.current_spell]["end speed"])
-                        self.spell_movement = 0
-                    if self.monster.take_damage(10) <= 0:
-                        self.monster.animate(animations[self.boss_queue[0]]["death"], True, True,False,True)
-                        self.state = "walk"
-                        self.boss_queue.pop(0)
-                        self.user_attacked = False
+                        self.spell.rect.center = self.monster.rect.center
+                        if self.spell_ended == False:
+                            self.spell.animate(animations[self.current_spell]["end"],True,True,kill=True,speed=animation_settings[self.current_spell]["end speed"])
+                            self.spell_movement = 0
+                            self.spell_ended = True
+                    if self.animation_percentage(self.spell) >= animation_settings[self.current_spell]["hurt_percentage"]:
+                        if self.monster.take_damage(10) <= 0:
+                            self.monster.animate(animations[self.boss_queue[0]]["death"], True, True,False,True)
+                            self.state = "walk"
+                            self.boss_queue.pop(0)
+                            self.user_attacked = False
 
-                    else:
-                        self.monster.animate(animations[self.boss_queue[0]]["take hit"], True, True)
-                        self.state = "monster turn"
-                    self.current_spell = False
-                    self.spell_movement = 0
-                    self.spell_started = False
+                        else:
+                            self.monster.animate(animations[self.boss_queue[0]]["take hit"], True, True)
+                            self.state = "monster turn"
+                        self.current_spell = False
+                        self.spell_movement = 0
+                        self.spell_started = False
 
     def monster_turn(self):
         self.user_attacked = False
@@ -243,7 +277,7 @@ class Game:
             background.rect.bottom = 800 - self.ground_hight + 10
             background.render(self.screen)
         self.monster.update()
-        self.monster.rect.bottomleft = (1000, 800 - self.ground_hight)
+        self.monster.rect.midbottom = (1300, 800 - self.ground_hight)
         self.spell.rect.x += self.spell_movement
         self.spell.update()
         self.spell.image.set_alpha(200)
