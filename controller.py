@@ -1,6 +1,10 @@
+import eel
+eel.init('Gui', allowed_extensions=['.js', '.html'])
 
 
 chosen_game = None
+
+@eel.expose
 def chose_game(name):
     global chosen_game
     if name == "epic dungeon adventure":
@@ -12,9 +16,8 @@ def chose_game(name):
     chosen_game = play
 
 
-name = "epic dungeon adventure"
-
-chose_game(name)
+eel.start('index.html')
+# name = "epic dungeon adventure"
+# chose_game(name)
 
 chosen_game()
-

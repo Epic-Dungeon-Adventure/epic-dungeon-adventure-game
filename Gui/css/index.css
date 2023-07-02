@@ -1,0 +1,441 @@
+body{
+    background-image:url("../images/bk4.jpg") ;
+
+}
+
+#nav{
+    opacity: 0.5;
+width: 85%;
+height: 300px;
+margin-top: -38px;
+margin-left: 107px;
+/* box-shadow: 0 0 10px rgba(233, 233, 233, 0.18); */
+}
+#hlogo{
+font-size: 11px;
+color:rgba(255, 255, 255, 0.582);
+font-family: 'Lucida Sans Regular', 'Lucida Grande', sans-serif, 'Arial Narrow Bold', sans-serif;
+margin-top: -90px;
+margin-left: 250px;
+
+}
+#logo{
+    width: 200px;
+    margin-left: 75px;
+
+}
+#libname{
+
+  color:rgb(255, 255, 255);
+  font-size: 60px;
+
+ animation: textAnimation 4s ease-in-out;
+}
+@keyframes textAnimation {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+#libdescription{
+margin-top: -45px;
+font-size: 14px;
+    color:rgba(255, 255, 255, 0.329);
+font-family:Georgia, 'Times New Roman', Times, serif;
+}
+#nd{
+    margin-left: 100px;
+    /* padding-top:3%; */
+margin-top: -260px;
+margin-left:350px;
+}
+/* #team{
+    margin-left: 900px;
+    margin-top: -700px;
+    display: inline-block;
+    color:aliceblue;
+
+} */
+
+#lib {
+  display: inline-block;
+  background-color: rgba(30, 13, 53, 0.479);
+  /* background-image: url("../images/lib2.png"); */
+  /* opacity: 0.8; */
+  border-radius: 9px;
+  width: 85%;
+  height: 630px;
+  margin-top: 200px;
+  margin-bottom: 80px;
+  margin-left: 107px;
+  margin-right: 50px;
+  box-shadow: 0 0 10px rgba(233, 233, 233, 0.918);
+  z-index: 1; /* Set a lower z-index value */
+  position: relative; /* Add position property */
+}
+
+#lib > * {
+  position: relative;
+  z-index: 0; /* Set a lower z-index value for the children of #lib */
+}
+
+#wrapper{
+    /* margin-top: 40px; */
+    max-height: 520px;
+    /* overflow: hidden; */
+
+}
+#wrapper,#gameslist{
+
+white-space: nowrap;
+/* to not show more than the maxheight */
+
+
+}
+#gameslist{
+     display: inline-block;
+    margin-left: 65%;
+overflow: hidden;
+/* margin-top: 30px; */
+
+}
+#gameslist img{
+display: block;
+height: 130px;
+width: 300px;
+padding: 0 2px;
+border-radius: 15px;
+/* padding: 5px; */
+/* border-top-right-radius:2px ;
+border-top-left-radius:20px;
+border-bottom-left-radius: 20px;
+border-bottom-right-radius: 20px; */
+margin-bottom: 16px;
+box-shadow: 0 0 7px rgba(187, 187, 187, 0.918);
+}
+#gameslist::-webkit-scrollbar {
+    width: 0;
+    background-color: transparent;
+}
+.gameimg {
+  transition: opacity 0.3s ease-in-out;
+}
+.gameimg:hover {
+  opacity: 0.5;
+  transform: scale(1.1);
+
+}
+
+
+/* #scrollup{
+
+    margin-top: -500px;
+    margin-left: 550px;
+} */
+
+.arrow{
+width: 300px;
+    background:none;
+    /* padding-top: 50px; */
+    border: none;
+}
+
+
+#arrowup{
+    display: inline-block;
+    margin-left: 736px;
+
+background: linear-gradient(to bottom, rgba(12, 8, 8, 0),
+         rgba(0, 0, 0, 0), rgba(10, 10, 12, 0.808));
+
+}
+#arrowdown{
+    margin-left: 736px;
+    margin-top:-30px;
+    width:300px;
+    padding-top: 7px;
+        background: linear-gradient(to bottom, rgb(0, 0, 0),
+         rgba(0, 0, 0, 0), rgba(10, 10, 12, 0));
+
+}
+#sdown,#sup {
+  cursor:pointer;
+  transition: transform 0.3s ease-in-out;
+}
+
+#sup {
+  /* padding-top: 30px; */
+  cursor: pointer;
+  animation:Animationup 2s ease-in-out infinite;
+}
+@keyframes Animationup {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }}
+#sdown:hover ,#sup:hover {
+  transform: scale(1.2);
+}
+#sdown {
+  cursor: pointer;
+  animation: Animationdown 2s ease-in-out infinite;
+}
+@keyframes Animationdown {
+
+ 100% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+ 0% {
+    opacity: 1;
+    transform: translateY(0);
+  }}
+
+/* #searchBox{
+    width:500px;
+    height: 25px;
+    border-radius: 8px;
+    background-color: rgba(22, 9, 43, 0.541);
+    font-size: 19px;
+    color: beige;
+    font-family: Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+   letter-spacing: 2px;
+margin-left: 30px;
+margin-top: 50px;
+box-shadow: 11px 5px 3px rgb(231, 223, 223)d ;
+} */
+
+ .game-buttons {
+      display: none;
+      /* Initially hide the buttons */
+    }
+  /* @keyframes fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+} */
+
+ #boy {
+  position: absolute;
+  display: inline-block;
+  margin-left: -1000px;
+  margin-top: -370px;
+  width: 500px;
+  /* animation: fadeOut 2s forwards infinite; */
+  }
+
+#most1{
+  display: inline-block;
+  position: absolute;
+  margin-top: -550px;
+  margin-left: -970px;
+}
+#the,#pop{
+  display: inline;
+  color: rgb(240, 248, 255);
+}
+
+#the{
+  font-size: 30px;
+}
+#pop{
+  font-size: 50px;
+}
+/* #dungeon1{
+  width: 300px;
+} */
+#line {
+  display: inline-block;
+  background-image: linear-gradient(to right, white, rgb(99, 71, 143),
+   rgba(48, 57, 187, 0.575), rgba(206, 201, 204, 0.281));
+  height: 1px;
+  width: 300px;
+  animation: lineAnimation 6s linear infinite;
+}
+
+@keyframes lineAnimation {
+  0% {
+    background-position: -300px 0;
+  }
+  100% {
+    background-position: 300px 0;
+  }
+}
+ .gamesb{
+  background: none;
+  border: none;
+ }
+ .gamesb:hover{
+  cursor: pointer;
+
+ }
+
+.gamedwindow {
+  padding: 40px;
+  display: inline-block;
+  background-color: rgb(20, 9, 61);
+  border-radius: 9px;
+  width: 79%;
+  height: 547px;
+  margin-top: -730px;
+  margin-bottom: 80px;
+  margin-left: 107px;
+  margin-right: 50px;
+  box-shadow: 0 0 10px rgba(233, 233, 233, 0.918);
+  z-index: 2;
+  position: relative;
+}
+.gamew2{
+width: 99%;
+height: 99%;
+background-color: rgba(32, 16, 53, 0.479);
+box-shadow: 0 0 10px rgba(233, 233, 233, 0.918);
+
+}
+#game1Details{
+  background-image: url(../images/d1.webp);
+  background-repeat: no-repeat;
+    background-size: cover;
+}
+.back{
+  background:none ;
+  border: none;
+
+}
+.back img{
+  width: 80px;
+  margin-top: -30px;
+  padding-bottom: 10px;
+
+}
+.back:hover{
+  cursor: pointer;
+}
+.play{
+  background-color: rgba(60, 32, 85, 0.301);
+  width: 250px;
+  padding: 6px;
+  font-size: 20px;
+  font-family:'Gill Sans', 'Gill Sans MT',
+   Calibri, 'Trebuchet MS', sans-serif ;
+   color:rgb(252, 252, 252);
+   border-radius: 7px;
+   box-shadow: 0;
+   margin-top:100px;
+   margin-left: 450px;
+}
+#tut{
+   background-color: rgba(98, 176, 182, 0.342);
+  width:160px;
+  padding: 6px;
+  font-size: 20px;
+  font-family:'Gill Sans', 'Gill Sans MT',
+   Calibri, 'Trebuchet MS', sans-serif ;
+   color:rgb(237, 237, 238);
+   border-radius: 7px;
+   box-shadow: 0;
+   /* margin-top:100px;
+    */
+    margin-left:10px;
+}
+
+.pgame2{
+  color: rgb(179, 237, 245);
+   font-size: 20px;
+  font-family:
+   Calibri, 'Trebuchet MS', sans-serif ;
+   margin-left: 250px;
+}
+
+#vtut{
+background-image: url(../images/d1.webp);
+  background-repeat: no-repeat;
+    background-size: cover;
+display: inline-block;
+ z-index: 3;
+position: relative;
+width:899px;
+padding:66px 100px;
+margin-left: 120px;
+margin-top:-700px ;
+
+}
+#vtut2{
+  /* margin-left: 300px; */
+  display: inline-block;
+  box-shadow: 0 0 10px rgba(233, 233, 233, 0.918);
+border-radius: 10px;
+}
+
+/* responsive */
+@media only screen and (max-width: 768px) {
+  #nav {
+    height: 50px;
+  }
+
+  #hlogo {
+    font-size: 14px;
+    margin-top: 7px;
+  }
+
+  #logo {
+    width: 40px;
+    margin-top: 5px;
+    margin-left: 5px;
+  }
+
+  #libname {
+    font-size: 60px;
+  }
+
+  #libdescription {
+    margin-top: -40px;
+    font-size: 16px;
+  }
+
+  #nd {
+    margin-left: 100px;
+    margin-top: -50px;
+  }
+
+  #lib {
+    margin-top: 150px;
+    margin-bottom: 60px;
+  }
+
+  #gameslist img {
+    height: 150px;
+    width: 150px;
+    padding: 5px;
+    margin-bottom: 12px;
+  }
+
+  .play {
+    width: 150px;
+    padding: 8px;
+    font-size: 18px;
+    margin-top: 40px;
+    margin-left: 60px;
+  }
+
+  #tut {
+    width: 100px;
+    padding: 8px;
+    font-size: 18px;
+    margin-left: 5px;
+  }
+
+  .pgame2 {
+    font-size: 18px;
+    margin-left: 5px;
+  }
+}

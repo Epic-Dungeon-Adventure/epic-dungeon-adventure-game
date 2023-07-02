@@ -22,4 +22,3 @@ class Terrain(pygame.sprite.Sprite):
         tiles = math.ceil(screen.get_width()  / self.image.get_width()) + 1
         for i in range(0, tiles):
             screen.blit(self.image, (i * self.image.get_width() + self.scroll, self.rect.y))
-        
