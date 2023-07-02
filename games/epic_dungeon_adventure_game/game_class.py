@@ -5,6 +5,7 @@ from components.text_box import TextBox
 from components.sound import Sound
 from components.terrain import Terrain
 from .animations import get_animations
+from components.bars import Bar
 
 animations = get_animations()
 
@@ -103,7 +104,13 @@ class Game:
         self.spell_started = False
 
         self.backgrounds = [Terrain(levels[self.level]["background"][0]+str(num)+".png", 1600, 800, (0,0),num / 3) for num in range(1,levels[self.level]["background"][1])]
-
+        self.user_health_bar = Bar(10, 10, 200, 20, 250, (255, 0, 0))
+        self.user_stamina_bar = Bar(10, 40, 200, 20, 200, (0, 255, 255))
+        self.monster_health_bar =  Bar(1390, 10, 200, 20, 100, (0, 0, 255))
+        self.monster_stamina_bar = Bar(1390 , 40, 200, 20, 100, (0, 255, 255))
+        
+        # self.user_health_bar.rect.midbottom = self.user.rect.midtop
+        
     def get_input(self):
         return pygame.key.get_pressed()
 
@@ -182,30 +189,38 @@ class Game:
                         self.state = "walk"
                         self.boss_queue.pop(0)
                         self.user_attacked = False
-
+                        self.monster_health_bar = Bar(1390, 10, 200, 20, 100, (0, 0, 255))  # Husam Create a new monster health bar
+                        self.monster_stamina_bar = Bar(1390 , 40, 200, 20, 100, (0, 255, 255))
                     else:
                         self.monster.animate(animations[self.boss_queue[0]]["take hit"], True, True)
                         self.state = "monster turn"
                     self.current_spell = False
                     self.spell_movement = 0
                     self.spell_started = False
+                    
+                    self.monster_health_bar.update_health(10)  
+                    self.user_stamina_bar.update_stamina(30)
 
     def monster_turn(self):
         self.user_attacked = False
         if self.monster_attacked == False:
             self.monster.animate(animations[self.boss_queue[0]]["attack"], True, True)
             self.monster_attacked = True
+            self.monster_stamina_bar.update_stamina(30)  # Husam Decrease monster's stamina
 
         if self.monster_attacked and self.monster.animation_complete:
             self.user.animate(animations["main character"]["hurt"], True, True)
             self.state = "user turn"
             self.monster_attacked = False
+            self.user_health_bar.update_health(50)  # Husam Decrease user's health
+        
 
         if self.user.take_damage(50) <= 0:
             self.user.animate(animations["main character"]["death"], True, True)
         self.current_spell = False
         self.spell_movement = 0
         self.spell_started = False  
+        
 
     def walk(self):
     
@@ -254,6 +269,15 @@ class Game:
         self.group.draw(self.screen)
         if self.text_box:
             self.text_box.render_words()
+        
+
+        
+        if self.state != "walk":  # Only draw the bars if not in the "walk" state
+            self.user_stamina_bar.draw(self.screen)   
+            self.user_health_bar.draw(self.screen)
+            self.monster_stamina_bar.draw(self.screen)
+            self.monster_health_bar.draw(self.screen)
+        
 
 # cut sprites perfcetly
 # use rect.center for consistant position
