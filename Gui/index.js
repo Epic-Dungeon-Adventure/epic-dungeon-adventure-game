@@ -1,10 +1,8 @@
 
-async function data() {
-  // Retrieve data from Python function
-  const response = await eel.hello_from_python("narmeen")();
-
-  // Display the response in the console
-  console.log(response);
+async function data(event) {
+  // const game_name = code for finding game name
+  window.close();
+  const response = await eel.chose_game(event.srcElement.value)();
 }
 
 // Add event listener to the "playButton" element
