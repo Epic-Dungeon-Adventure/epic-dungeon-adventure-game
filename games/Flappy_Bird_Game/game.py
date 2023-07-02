@@ -3,7 +3,6 @@ import sys
 import random
 
 
-
 class FlappyBirdGame:
     def __init__(self):
         pygame.mixer.pre_init(frequency=44100, size=16, channels=1, buffer=512)
@@ -165,8 +164,6 @@ class FlappyBirdGame:
 
     def run(self):
         running = True
-        bird2_appeared = False
-        bird3_appeared = False
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -206,7 +203,12 @@ class FlappyBirdGame:
 
                 self.move_pipes()
                 self.draw_pipes()
-
+                self.bird2_rect.centerx -= 5
+                self.screen.blit(self.bird2_surface, self.bird2_rect)
+                self.bird3_rect.centerx -= 5
+                self.screen.blit(self.bird3_surface, self.bird3_rect)
+                self.screen.blit(self.bird2_surface, self.bird2_rect)
+                self.screen.blit(self.bird3_surface, self.bird3_rect)
                 self.score += 0.01
                 self.score_sound_countdown -= 1
                 if self.score_sound_countdown <= 0:
@@ -228,8 +230,7 @@ class FlappyBirdGame:
                 while any(pipe.colliderect(self.bird2_rect) for pipe in self.pipe_list):
                     new_bird2_y = random.randint(100, 300)
                     self.bird2_rect.center = (400, new_bird2_y)
-            self.bird2_rect.centerx -= 5
-            self.screen.blit(self.bird2_surface, self.bird2_rect)
+            
 
             if random.randint(0, 400) == 0:
                 new_bird3_y = random.randint(100, 300)
@@ -237,11 +238,9 @@ class FlappyBirdGame:
                 while any(pipe.colliderect(self.bird3_rect) for pipe in self.pipe_list):
                     new_bird3_y = random.randint(100, 300)
                     self.bird3_rect.center = (600, new_bird3_y)
-            self.bird3_rect.centerx -= 5
-            self.screen.blit(self.bird3_surface, self.bird3_rect)
+            
 
-            self.screen.blit(self.bird2_surface, self.bird2_rect)
-            self.screen.blit(self.bird3_surface, self.bird3_rect)
+            
             score_surface = self.game_font.render(f'Score: {int(self.score)}', True, (255, 255, 255))
             score_rect = score_surface.get_rect(center=(144, 40))
             self.screen.blit(score_surface, score_rect)
