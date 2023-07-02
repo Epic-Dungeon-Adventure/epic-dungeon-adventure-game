@@ -31,9 +31,9 @@ spells = {
 monsters = {
 "ice boss":{
     "attack":{
-        "spell":"water light",
+        "spell":"fire light",
         "trigger_percentage":10,
-        "send_percentage":50,
+        "send_percentage":45,
         },
 },
 "demon boss":{
@@ -71,10 +71,10 @@ animation_settings = {
 
     ("fire light"):{
         "start speed":0.2,
-        "repeat speed":0.5,
+        "repeat speed":0.2,
         "end speed":0.4,
         "element":"fire",
-        "trigger_percentage":50,
+        "trigger_percentage":60,
         "hurt_percentage":20,
     },
 
