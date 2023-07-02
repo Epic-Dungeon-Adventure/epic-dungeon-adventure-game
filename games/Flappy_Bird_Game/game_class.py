@@ -1,14 +1,16 @@
 import pygame
-import sys
+# from random import randint, choice
 import random
+import sys
 
-
+from components.entitty import Entity
+from .animations import get_animations
 
 class FlappyBirdGame:
-    def __init__(self):
+    def __init__(self, screen):
         pygame.mixer.pre_init(frequency=44100, size=16, channels=1, buffer=512)
         pygame.init()
-        self.screen = pygame.display.set_mode((288, 512))
+        self.screen = screen
         self.clock = pygame.time.Clock()
         self.game_font = pygame.font.Font('games/Flappy_Bird_Game/assets/font/04B_19.TTF', 30)
         self.bird2_surface = pygame.image.load('games/Flappy_Bird_Game/assets/parrot/Parrot_1.png').convert_alpha()
@@ -29,7 +31,7 @@ class FlappyBirdGame:
 
         self.gravity = 0.25
         self.bird_movement = 0
-        self.game_active = False
+        self.game_active = True
         self.score = 0
         self.high_score = 0
         self.game_font = pygame.font.Font('games/Flappy_Bird_Game/assets/font/04B_19.TTF', 30)
@@ -163,91 +165,4 @@ class FlappyBirdGame:
         if self.score > self.high_score:
             self.high_score = self.score
 
-    def run(self):
-        running = True
-        bird2_appeared = False
-        bird3_appeared = False
-        while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE and self.game_active:
-                        self.bird_movement = 0
-                        self.bird_movement -= 6
-                        self.flap_sound.play()
-                    if event.key == pygame.K_SPACE and not self.game_active:
-                        self.game_active = True
-                        self.pipe_list.clear()
-                        self.bird_rect.center = (100, 256)
-                        self.bird_movement = 0
-                        self.score = 0
 
-                if event.type == self.SPAWNPIPE:
-                    self.pipe_list.extend(self.create_pipe())
-
-                if event.type == self.BIRDFLAP:
-                    if self.bird_index < 2:
-                        self.bird_index += 1
-                    else:
-                        self.bird_index = 0
-
-                    self.bird_surface, self.bird_rect = self.bird_animation()
-
-            self.screen.blit(self.bg_surface, (0, 0))
-
-            if self.game_active:
-                self.bird_movement += self.gravity
-                rotated_bird = self.rotate_bird()
-                self.bird_rect.centery += self.bird_movement
-                self.screen.blit(rotated_bird, self.bird_rect)
-                self.game_active = self.check_collision()
-
-                self.move_pipes()
-                self.draw_pipes()
-
-                self.score += 0.01
-                self.score_sound_countdown -= 1
-                if self.score_sound_countdown <= 0:
-                    self.score_sound.play()
-                    self.score_sound_countdown = 100
-            else:
-                self.screen.blit(self.game_over_surface, self.game_over_rect)
-                self.update_score()
-                self.score_display('game_over')
-
-            self.floor_x_pos -= 1
-            self.draw_floor()
-            if self.floor_x_pos <= -288:
-                self.floor_x_pos = 0
-
-            if random.randint(0, 300) == 0:
-                new_bird2_y = random.randint(100, 300)
-                self.bird2_rect.center = (400, new_bird2_y)
-                while any(pipe.colliderect(self.bird2_rect) for pipe in self.pipe_list):
-                    new_bird2_y = random.randint(100, 300)
-                    self.bird2_rect.center = (400, new_bird2_y)
-            self.bird2_rect.centerx -= 5
-            self.screen.blit(self.bird2_surface, self.bird2_rect)
-
-            if random.randint(0, 400) == 0:
-                new_bird3_y = random.randint(100, 300)
-                self.bird3_rect.center = (600, new_bird3_y)
-                while any(pipe.colliderect(self.bird3_rect) for pipe in self.pipe_list):
-                    new_bird3_y = random.randint(100, 300)
-                    self.bird3_rect.center = (600, new_bird3_y)
-            self.bird3_rect.centerx -= 5
-            self.screen.blit(self.bird3_surface, self.bird3_rect)
-
-            self.screen.blit(self.bird2_surface, self.bird2_rect)
-            self.screen.blit(self.bird3_surface, self.bird3_rect)
-            score_surface = self.game_font.render(f'Score: {int(self.score)}', True, (255, 255, 255))
-            score_rect = score_surface.get_rect(center=(144, 40))
-            self.screen.blit(score_surface, score_rect)
-
-            pygame.display.update()
-            self.clock.tick(60)
-
-game = FlappyBirdGame()
-game.run()

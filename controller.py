@@ -1,3 +1,3 @@
-from games.epic_dungeon_adventure_game.game import play
+from games.Flappy_Bird_Game.game import run
 
-play()
+run()
