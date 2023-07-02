@@ -118,9 +118,11 @@ class Game:
         self.group = pygame.sprite.Group()
         self.group.add(self.user)
         self.group.add(self.event_box)
+
         self.user_attacked = False
         self.monster_attacked = False
         self.ground_hight = 10
+        self.current_monster = self.boss_queue[0]
         self.current_spell = False
         self.spell_movement = 0
         self.spell_started = False
@@ -153,6 +155,7 @@ class Game:
         if keys[pygame.K_SPACE]:
             self.text_box = None
             self.state = "user turn"
+        self.current_monster = self.boss_queue[0]
 
     @staticmethod
     def animation_percentage(entity):
@@ -223,23 +226,60 @@ class Game:
                         self.current_spell = False
                         self.spell_movement = 0
                         self.spell_started = False
+                        self.spell_ended = False
 
     def monster_turn(self):
         self.user_attacked = False
+
         if self.monster_attacked == False:
-            self.monster.animate(animations[self.boss_queue[0]]["attack"], True, True)
+            self.monster.animate(animations[self.current_monster]["attack"], True, True)
             self.monster_attacked = True
+            self.current_spell = monsters[self.current_monster]["attack"]["spell"]
+            kill_spell = False
+            if "heavy" in self.current_spell:
+                kill_spell = True
 
-        if self.monster_attacked and self.monster.animation_complete:
-            self.user.animate(animations["main character"]["hurt"], True, True)
-            self.state = "user turn"
-            self.monster_attacked = False
+            self.spell = Entity(animations[self.current_spell]["repeat"], default_speed = animation_settings[self.current_spell]["repeat speed"])
+            self.spell.kill_after_animation = kill_spell
 
-        if self.user.take_damage(50) <= 0:
-            self.user.animate(animations["main character"]["death"], True, True)
-        self.current_spell = False
-        self.spell_movement = 0
-        self.spell_started = False  
+        if self.monster_attacked and self.animation_percentage(self.spell) >= monsters[self.current_monster]["attack"]["trigger_percentage"] or self.spell_started:
+            self.group.add(self.spell)
+
+        if not "heavy" in self.current_spell and not self.spell_started:
+            self.spell.animate(animations[self.current_spell]["start"],True,True,speed=animation_settings[self.current_spell]["start speed"])
+            self.spell_started = True
+            self.spell.rect.midright = self.monster.rect.midleft
+    
+        if self.animation_percentage(self.monster) >= monsters[self.current_monster]["attack"]["send_percentage"] and self.spell_started:
+            self.spell_movement = -5
+    
+        if "heavy" in self.current_spell and not self.spell_started:
+            self.spell.rect.bottomleft = self.user.rect.bottomleft
+            self.spell.animation_index = 0
+            self.spell.animation_complete = False
+            self.spell_started = True
+
+        if self.spell.rect.x <= self.user.rect.center[0]:
+            if not "heavy" in self.current_spell:
+                self.spell.rect.center = self.user.rect.center
+                if self.spell_ended == False:
+                    self.spell.animate(animations[self.current_spell]["end"],True,True,kill=True,speed=animation_settings[self.current_spell]["end speed"])
+                    self.spell_movement = 0
+                    self.spell_ended = True
+
+
+        if self.animation_percentage(self.spell) >= animation_settings[self.current_spell]["hurt_percentage"] and self.spell_ended:
+            if self.user.take_damage(10) <= 0:
+                self.user.animate(animations["main character"]["death"])
+                self.state = "walk"
+            
+            else:
+                self.user.animate(animations["main character"]["take hit"],True,True)
+                self.state = "user turn"
+            self.current_spell = False
+            self.spell_movement = 0
+            self.spell_started = False
+            self.spell_ended = False
 
     def walk(self):
     
@@ -266,7 +306,7 @@ class Game:
         if self.state == "user turn" and self.monster.animation_complete:
             self.user_turn()
 
-        if self.state == "monster turn" and self.monster.animation_complete and self.user.animation_complete and self.spell.animation_complete:
+        if self.state == "monster turn" and self.monster.current_animation != animations[self.current_monster]["take hit"]:
             self.monster_turn()
 
         if self.state == "walk" and self.monster.animation_complete and self.user.animation_complete:
@@ -277,10 +317,12 @@ class Game:
             background.rect.bottom = 800 - self.ground_hight + 10
             background.render(self.screen)
         self.monster.update()
-        self.monster.rect.midbottom = (1300, 800 - self.ground_hight)
+        self.monster.rect.midbottom = (1400, 800 - self.ground_hight)
         self.spell.rect.x += self.spell_movement
         self.spell.update()
         self.spell.image.set_alpha(200)
+        if self.state == "monster turn":
+            self.spell.image = pygame.transform.flip(self.spell.image,True,False)
         self.user.update()
         self.user.rect.bottom =  800 - self.ground_hight
         self.event_box.update()
