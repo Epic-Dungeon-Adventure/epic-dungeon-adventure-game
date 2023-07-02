@@ -38,7 +38,7 @@ def get_animations():
 
     path_list=['./games/epic_dungeon_adventure_game/assets/wizzard/hurt/hurt'+str(num)+'.png' for num in range(1,5)]
     knight_walk = Animation(path_list, 300, 200)
-    animations['main character']['hurt'] = knight_walk.farme_list
+    animations['main character']['take hit'] = knight_walk.farme_list
 
     path_list=['./games/epic_dungeon_adventure_game/assets/wizzard/idle/tile00'+str(num)+'.png' for num in range(0,8)]
     knight_walk = Animation(path_list, 300, 200)
@@ -146,7 +146,7 @@ def get_animations():
     ice_death = Animation(path_list, 400, 400)
     animations['fire heavy']['repeat'] = ice_death.farme_list
 
-    path_list = ['games/epic_dungeon_adventure_game/assets/spells/light_fire/start/tile' + str(num).zfill(3) + '.png' for num in range(0,7)]
+    path_list = ['games/epic_dungeon_adventure_game/assets/spells/light_fire/start/tile' + str(num).zfill(3) + '.png' for num in range(0,4)]
 
     ice_death = Animation(path_list, 200, 200)
     animations['fire light']['start'] = ice_death.farme_list

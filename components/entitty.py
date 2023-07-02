@@ -61,8 +61,4 @@ class Animation:
     def __init__(self, path_list, width, hight):
         self.farme_list = []
         for path in path_list:
-            self.farme_list.append(
-                pygame.transform.scale(
-                    pygame.image.load(path).convert_alpha(), (width, hight)
-                )
-            )
+            self.farme_list.append(pygame.transform.scale(pygame.image.load(path).convert_alpha(), (width, hight)))
