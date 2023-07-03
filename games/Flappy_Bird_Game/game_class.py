@@ -1,16 +1,12 @@
 import pygame
-# from random import randint, choice
 import random
-import sys
-
-from components.entitty import Entity
-from .animations import get_animations
+from components.sound import Sound
 
 class FlappyBirdGame:
-    def __init__(self, screen):
+    def __init__(self):
         pygame.mixer.pre_init(frequency=44100, size=16, channels=1, buffer=512)
         pygame.init()
-        self.screen = screen
+        self.screen = pygame.display.set_mode((288, 512))
         self.clock = pygame.time.Clock()
         self.game_font = pygame.font.Font('games/Flappy_Bird_Game/assets/font/04B_19.TTF', 30)
         self.bird2_surface = pygame.image.load('games/Flappy_Bird_Game/assets/parrot/Parrot_1.png').convert_alpha()
@@ -31,12 +27,14 @@ class FlappyBirdGame:
 
         self.gravity = 0.25
         self.bird_movement = 0
-        self.game_active = True
+        self.game_active = False
         self.score = 0
         self.high_score = 0
         self.game_font = pygame.font.Font('games/Flappy_Bird_Game/assets/font/04B_19.TTF', 30)
 
-
+        self.sound1 = Sound('games/Flappy_Bird_Game/sound/sfx_hit.wav')
+        self.sound2 = Sound('games/Flappy_Bird_Game/sound/sfx_point.wav')
+        self.sound3 = Sound('games/Flappy_Bird_Game/sound/sfx_wing.wav')
 
         self.load_assets()
         self.create_birds()
@@ -66,9 +64,9 @@ class FlappyBirdGame:
         self.game_over_surface = pygame.image.load('games/Flappy_Bird_Game/assets/message.png').convert_alpha()
         self.game_over_rect = self.game_over_surface.get_rect(center=(144, 256))
 
-        self.flap_sound = pygame.mixer.Sound('games/Flappy_Bird_Game/sound/sfx_wing.wav')
-        self.death_sound = pygame.mixer.Sound('games/Flappy_Bird_Game/sound/sfx_hit.wav')
-        self.score_sound = pygame.mixer.Sound('games/Flappy_Bird_Game/sound/sfx_point.wav')
+        # self.flap_sound = pygame.mixer.Sound('games/Flappy_Bird_Game/sound/sfx_wing.wav')
+        # self.death_sound = pygame.mixer.Sound('games/Flappy_Bird_Game/sound/sfx_hit.wav')
+        # self.score_sound = pygame.mixer.Sound('games/Flappy_Bird_Game/sound/sfx_point.wav')
         self.score_sound_countdown = 100
 
     def create_birds(self):
@@ -121,14 +119,14 @@ class FlappyBirdGame:
     def check_collision(self):
         for pipe in self.pipe_list:
             if self.bird_rect.colliderect(pipe):
-                self.death_sound.play()
+                self.sound1.play()
                 return False
 
         if (
             self.bird_rect.colliderect(self.bird2_rect)
             or self.bird_rect.colliderect(self.bird3_rect)
         ):
-            self.death_sound.play()
+            self.sound1.play()
             return False
 
         if self.bird_rect.top <= -100 or self.bird_rect.bottom >= 420:
@@ -164,5 +162,3 @@ class FlappyBirdGame:
     def update_score(self):
         if self.score > self.high_score:
             self.high_score = self.score
-
-
