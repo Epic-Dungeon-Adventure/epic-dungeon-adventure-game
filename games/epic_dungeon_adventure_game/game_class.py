@@ -81,7 +81,7 @@ class Game:
         self.font = pygame.font.SysFont("Inkfree", 30)
         self.screen = screen
         self.user = Entity(animations["main character"]["idle"], 250)
-        self.monster = Entity(animations["ice boss"]["idle"], 20)
+        self.monster = Entity(animations["ice boss"]["idle"], 40)
         self.spell = Entity(animations['water heavy']['repeat'])
 
         self.event_box = Entity([pygame.Surface((50, 50))])
@@ -106,8 +106,8 @@ class Game:
         self.backgrounds = [Terrain(levels[self.level]["background"][0]+str(num)+".png", 1600, 800, (0,0),num / 3) for num in range(1,levels[self.level]["background"][1])]
         self.user_health_bar = Bar(10, 10, 200, 20, 250, (255, 0, 0))
         self.user_stamina_bar = Bar(10, 40, 200, 20, 200, (0, 255, 255))
-        self.monster_health_bar =  Bar(1390, 10, 200, 20, 100, (0, 0, 255))
-        self.monster_stamina_bar = Bar(1390 , 40, 200, 20, 100, (0, 255, 255))
+        self.monster_health_bar =  Bar(1390, 10, 200, 20, 40, (0, 0, 255))
+       
         
         # self.user_health_bar.rect.midbottom = self.user.rect.midtop
         
@@ -181,6 +181,8 @@ class Game:
                     self.spell.animation_index = 0
 
                 if self.spell.rect.colliderect(self.monster.rect):
+                    self.monster_health_bar.update_health(10) # Husam  
+                    self.user_stamina_bar.update_stamina(30)
                     if not 'heavy' in self.current_spell:
                         self.spell.animate(animations[self.current_spell]['end'], True, True, kill=True,speed=animation_settings[self.current_spell]["end speed"])
                         self.spell_movement = 0
@@ -190,7 +192,9 @@ class Game:
                         self.boss_queue.pop(0)
                         self.user_attacked = False
                         self.monster_health_bar = Bar(1390, 10, 200, 20, 100, (0, 0, 255))  # Husam Create a new monster health bar
-                        self.monster_stamina_bar = Bar(1390 , 40, 200, 20, 100, (0, 255, 255))
+
+                        
+                    
                     else:
                         self.monster.animate(animations[self.boss_queue[0]]["take hit"], True, True)
                         self.state = "monster turn"
@@ -198,15 +202,15 @@ class Game:
                     self.spell_movement = 0
                     self.spell_started = False
                     
-                    self.monster_health_bar.update_health(10)  
-                    self.user_stamina_bar.update_stamina(30)
+                    
+
 
     def monster_turn(self):
         self.user_attacked = False
         if self.monster_attacked == False:
             self.monster.animate(animations[self.boss_queue[0]]["attack"], True, True)
             self.monster_attacked = True
-            self.monster_stamina_bar.update_stamina(30)  # Husam Decrease monster's stamina
+            
 
         if self.monster_attacked and self.monster.animation_complete:
             self.user.animate(animations["main character"]["hurt"], True, True)
@@ -275,7 +279,6 @@ class Game:
         if self.state != "walk":  # Only draw the bars if not in the "walk" state
             self.user_stamina_bar.draw(self.screen)   
             self.user_health_bar.draw(self.screen)
-            self.monster_stamina_bar.draw(self.screen)
             self.monster_health_bar.draw(self.screen)
         
 

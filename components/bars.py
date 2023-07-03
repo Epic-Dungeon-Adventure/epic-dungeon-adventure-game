@@ -16,7 +16,7 @@ class Bar:
         bar_ratio = self.current_value / self.max
         health_width = int(self.width * bar_ratio)
         pygame.draw.rect(screen, self.color, self.rect, 2, border_radius=20)
-        pygame.draw.rect(screen, self.color, (self.x, self.y, health_width, self.height))
+        pygame.draw.rect(screen, self.color, (self.x, self.y, health_width, self.height),border_radius=20)
 
 
     def update_health(self, damage):
