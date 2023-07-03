@@ -50,7 +50,7 @@ monsters = {
 "bringer of death":{
       "attack":{
         "spell":"shadow heavy",
-        "trigger_percentage":10,
+        "trigger_percentage":100,
         "send_percentage":50,
         },
     "story":"ice boss",
@@ -91,7 +91,7 @@ animation_settings = {
     },
 
     ("electric heavy"):{
-        "repeat speed":0.5,
+        "repeat speed":0.2,
         "element":"electric",
         "trigger_percentage":90,
         "hurt_percentage":50,
@@ -107,7 +107,7 @@ animation_settings = {
     },
     
     ("shadow heavy"):{
-        "repeat speed":0.09,
+        "repeat speed":0.2,
         "element":"electric",
         "trigger_percentage":90,
         "hurt_percentage":50,
@@ -153,7 +153,7 @@ class Game:
 
     def create_text_box(self, text, speed = 0.1):
         ground_margin = 10
-        self.text_box = TextBox(self.screen, (1600, 300), "gray", text, self.font, "black", speed)
+        self.text_box = TextBox(self.screen, (self.screen.get_width(), 300), "gray", text, self.font, "black", speed)
         self.ground_hight = self.text_box.box_size[1] + ground_margin
 
     def event_box_collision(self):
@@ -249,8 +249,7 @@ class Game:
 
     def monster_turn(self):
         self.user_attacked = False
-        print(self.spell.kill_after_animation)
-        if self.monster_attacked == False:
+        if self.monster_attacked == False and not self.group.has(self.spell):
             self.monster.animate(animations[self.current_monster]["attack"], True, True)
             self.monster_attacked = True
             self.current_spell = monsters[self.current_monster]["attack"]["spell"]
@@ -260,10 +259,13 @@ class Game:
 
             self.spell = Entity(animations[self.current_spell]["repeat"], default_speed = animation_settings[self.current_spell]["repeat speed"])
             self.spell.kill_after_animation = kill_spell
-
-        if self.monster_attacked and self.animation_percentage(self.spell) >= monsters[self.current_monster]["attack"]["trigger_percentage"] or self.spell_started and not self.spell_ended:
+        
+        elif not self.monster_attacked: return
+        
+        if self.monster_attacked and self.animation_percentage(self.monster) >= monsters[self.current_monster]["attack"]["trigger_percentage"]:
             self.group.add(self.spell)
-            print("added")
+        else: 
+            self.spell.animation_index = 0
 
         if not "heavy" in self.current_spell and not self.spell_started:
             self.spell.animate(animations[self.current_spell]["start"],True,True,speed=animation_settings[self.current_spell]["start speed"])
@@ -274,7 +276,7 @@ class Game:
             self.spell_movement = -5
     
         if "heavy" in self.current_spell and not self.spell_started:
-            self.spell.rect.bottomleft = self.user.rect.bottomleft
+            self.spell.rect.midbottom = self.user.rect.midbottom
             self.spell.animation_index = 0
             self.spell.animation_complete = False
             self.spell_started = True
@@ -288,7 +290,7 @@ class Game:
                     self.spell_ended = True
             else:
                 self.spell_ended = True
-                self.spell.rect.midtop = self.user.rect.midtop
+                self.spell.rect.midbottom = self.user.rect.midbottom
         
         if self.animation_percentage(self.spell) >= animation_settings[self.current_spell]["hurt_percentage"] and self.spell_ended:
             print("hit user")
@@ -303,6 +305,7 @@ class Game:
             self.spell_movement = 0
             self.spell_started = False
             self.spell_ended = False
+            self.monster_attacked = False
 
     def walk(self):
     

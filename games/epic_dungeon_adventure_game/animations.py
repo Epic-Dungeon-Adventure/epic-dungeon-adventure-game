@@ -195,7 +195,7 @@ def get_animations():
 
 
     path_list = ['games/epic_dungeon_adventure_game/assets/spells/heavy_shadow/Bringer-of-Death_Spell_' + str(num) + '.png' for num in range(1,17)]
-    ice_death = Animation(path_list, 400, 400)
+    ice_death = Animation(path_list, 600, 600)
     animations['shadow heavy']['repeat'] = ice_death.farme_list
 
     # Dark_Woods
