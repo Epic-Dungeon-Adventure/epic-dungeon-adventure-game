@@ -5,6 +5,7 @@ from components.text_box import TextBox
 from components.sound import Sound
 from components.terrain import Terrain
 from .animations import get_animations
+from components.bars import Bar
 
 animations = get_animations()
 
@@ -148,6 +149,10 @@ class Game:
 
         self.backgrounds = [Terrain(levels[self.level]["background"][0]+str(num)+".png", 1600, 800, (0,0),num / 3) for num in range(1,levels[self.level]["background"][1])]
 
+        self.user_health_bar = Bar(10, 10, 200, 20, 250, (255, 0, 0))
+        self.user_stamina_bar = Bar(10, 40, 200, 20, 200, (0, 255, 255))
+        self.monster_health_bar =  Bar(1390, 10, 200, 20, 40, (0, 0, 255))
+
     def get_input(self):
         return pygame.key.get_pressed()
 
@@ -232,12 +237,14 @@ class Game:
                             self.spell_movement = 0
                             self.spell_ended = True
                     if self.animation_percentage(self.spell) >= animation_settings[self.current_spell]["hurt_percentage"]:
-                        print("hit mon")
+                        self.monster_health_bar.update_health(10)
+                        self.user_stamina_bar.update_stamina(30)
                         if self.monster.take_damage(10) <= 0:
                             self.monster.animate(animations[self.boss_queue[0]]["death"], True, True,False,True)
                             self.state = "walk"
                             self.boss_queue.pop(0)
                             self.user_attacked = False
+                            self.monster_health_bar = Bar(1390, 10, 200, 20, 100, (0, 0, 255))
 
                         else:
                             self.monster.animate(animations[self.boss_queue[0]]["take hit"], True, True)
@@ -293,7 +300,7 @@ class Game:
                 self.spell.rect.midbottom = self.user.rect.midbottom
         
         if self.animation_percentage(self.spell) >= animation_settings[self.current_spell]["hurt_percentage"] and self.spell_ended:
-            print("hit user")
+            self.user_health_bar.update_health(100)
             if self.user.take_damage(100) <= 0:
                 self.user.animate(animations["main character"]["death"],True,True,kill=True)
                 self.state = "game over"
@@ -324,16 +331,15 @@ class Game:
         if self.user.rect.colliderect(self.event_box.rect):
             self.event_box_collision()
 
-
     def update_state(self):
         if self.state == "tell story":
             self.tell_story()
+        
+        if self.state == "monster turn" and self.monster.current_animation != animations[self.current_monster]["take hit"]:
+            self.monster_turn()
 
         if self.state == "user turn" and self.monster.animation_complete:
             self.user_turn()
-
-        if self.state == "monster turn" and self.monster.current_animation != animations[self.current_monster]["take hit"]:
-            self.monster_turn()
 
         if self.state == "walk" and self.monster.animation_complete and self.user.animation_complete:
             self.walk()
@@ -356,6 +362,11 @@ class Game:
         self.group.draw(self.screen)
         if self.text_box:
             self.text_box.render_words()
+        
+        if self.state != "walk":  
+            self.user_stamina_bar.draw(self.screen)   
+            self.user_health_bar.draw(self.screen)
+            self.monster_health_bar.draw(self.screen)
 
 # cut sprites perfcetly
 # use rect.center for consistant position
