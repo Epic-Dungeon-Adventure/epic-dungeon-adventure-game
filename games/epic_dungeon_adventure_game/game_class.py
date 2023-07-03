@@ -149,9 +149,9 @@ class Game:
 
         self.backgrounds = [Terrain(levels[self.level]["background"][0]+str(num)+".png", 1600, 800, (0,0),num / 3) for num in range(1,levels[self.level]["background"][1])]
 
-        self.user_health_bar = Bar(10, 10, 200, 20, 250, (255, 0, 0))
+        self.user_health_bar = Bar(10, 10, 200, 20, 400, (255, 0, 0))
         self.user_stamina_bar = Bar(10, 40, 200, 20, 200, (0, 255, 255))
-        self.monster_health_bar =  Bar(1390, 10, 200, 20, 40, (0, 0, 255))
+        self.monster_health_bar =  Bar(1390, 10, 200, 20, 20, (0, 0, 255))
 
     def get_input(self):
         return pygame.key.get_pressed()
@@ -244,7 +244,7 @@ class Game:
                             self.state = "walk"
                             self.boss_queue.pop(0)
                             self.user_attacked = False
-                            self.monster_health_bar = Bar(1390, 10, 200, 20, 100, (0, 0, 255))
+                            self.monster_health_bar = Bar(1390, 10, 200, 20,20, (0, 0, 255))
 
                         else:
                             self.monster.animate(animations[self.boss_queue[0]]["take hit"], True, True)
