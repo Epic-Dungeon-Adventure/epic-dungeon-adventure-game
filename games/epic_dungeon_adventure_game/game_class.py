@@ -37,9 +37,19 @@ monsters = {
         },
     "story":"ice boss",
 },
+
 "demon boss":{
       "attack":{
         "spell":"fire light",
+        "trigger_percentage":10,
+        "send_percentage":50,
+        },
+    "story":"ice boss",
+},
+
+"bringer of death":{
+      "attack":{
+        "spell":"shadow heavy",
         "trigger_percentage":10,
         "send_percentage":50,
         },
@@ -81,7 +91,7 @@ animation_settings = {
     },
 
     ("electric heavy"):{
-        "repeat speed":0.09,
+        "repeat speed":0.5,
         "element":"electric",
         "trigger_percentage":90,
         "hurt_percentage":50,
@@ -96,6 +106,12 @@ animation_settings = {
         "hurt_percentage":20,
     },
     
+    ("shadow heavy"):{
+        "repeat speed":0.09,
+        "element":"electric",
+        "trigger_percentage":90,
+        "hurt_percentage":50,
+    },
 }
 
 class Game:
@@ -104,17 +120,17 @@ class Game:
         self.state = "walk"
         self.font = pygame.font.SysFont("Inkfree", 30)
         self.screen = screen
-        self.user = Entity(animations["main character"]["idle"], 100)
-        self.monster = Entity(animations["ice boss"]["idle"], 20)
+        self.user = Entity(animations["main character"]["idle"], 400)
+        self.monster = Entity(animations["bringer of death"]["idle"], 20)
         self.spell = Entity(animations['water heavy']['repeat'])
 
         self.event_box = Entity([pygame.Surface((50, 50))])
         self.event_box.image.fill("white")
         self.event_box.image.set_alpha(100)
-        self.event_box.rect.topleft = (800, 400)
+        self.event_box.rect.topleft = (200, 400)
 
         self.event_queue = ["tell story", "user turn", "walk"]
-        self.boss_queue = ["ice boss", "demon boss"]
+        self.boss_queue = ["bringer of death","ice boss", "demon boss"]
         self.story_queue = ["In the depths of a frozen cavern, amidst towering ice walls and glittering icicles, an awe-inspiring ice dragon awaits your arrival. Its colossal body, adorned with shimmering scales of ice, emanates an intense coldness that permeates the chamber. As the dragon fixes its piercing gaze upon you, its voice resonates with ancient wisdom, questioning your purpose in its icy domain. With a mixture of wonder and trepidation, your fate becomes intertwined with this majestic creature, as you stand on the threshold of a chilling and thrilling adventure."]
         self.text_box = None
         self.group = pygame.sprite.Group()
@@ -233,7 +249,7 @@ class Game:
 
     def monster_turn(self):
         self.user_attacked = False
-
+        print(self.spell.kill_after_animation)
         if self.monster_attacked == False:
             self.monster.animate(animations[self.current_monster]["attack"], True, True)
             self.monster_attacked = True
@@ -245,15 +261,16 @@ class Game:
             self.spell = Entity(animations[self.current_spell]["repeat"], default_speed = animation_settings[self.current_spell]["repeat speed"])
             self.spell.kill_after_animation = kill_spell
 
-        if self.monster_attacked and self.animation_percentage(self.spell) >= monsters[self.current_monster]["attack"]["trigger_percentage"] or self.spell_started:
+        if self.monster_attacked and self.animation_percentage(self.spell) >= monsters[self.current_monster]["attack"]["trigger_percentage"] or self.spell_started and not self.spell_ended:
             self.group.add(self.spell)
+            print("added")
 
         if not "heavy" in self.current_spell and not self.spell_started:
             self.spell.animate(animations[self.current_spell]["start"],True,True,speed=animation_settings[self.current_spell]["start speed"])
             self.spell_started = True
             self.spell.rect.midright = self.monster.rect.midleft
     
-        if self.animation_percentage(self.monster) >= monsters[self.current_monster]["attack"]["send_percentage"] and self.spell_started:
+        if self.animation_percentage(self.monster) >= monsters[self.current_monster]["attack"]["send_percentage"] and self.spell_started and not "heavy" in self.current_spell:
             self.spell_movement = -5
     
         if "heavy" in self.current_spell and not self.spell_started:
@@ -269,9 +286,12 @@ class Game:
                     self.spell.animate(animations[self.current_spell]["end"],True,True,kill=True,speed=animation_settings[self.current_spell]["end speed"])
                     self.spell_movement = 0
                     self.spell_ended = True
-
-
+            else:
+                self.spell_ended = True
+                self.spell.rect.midtop = self.user.rect.midtop
+        
         if self.animation_percentage(self.spell) >= animation_settings[self.current_spell]["hurt_percentage"] and self.spell_ended:
+            print("hit user")
             if self.user.take_damage(100) <= 0:
                 self.user.animate(animations["main character"]["death"],True,True,kill=True)
                 self.state = "game over"
