@@ -14,7 +14,7 @@ class Entity(pygame.sprite.Sprite):
         if size != None:
             self.image = pygame.transform.scale(self.image, size)
         self.rect = self.image.get_rect()
-        self.animation_index = 0 
+        self.animation_index = 0
         self.animation_speed = default_speed
         self.default_speed = default_speed
         self.animation_complete = True

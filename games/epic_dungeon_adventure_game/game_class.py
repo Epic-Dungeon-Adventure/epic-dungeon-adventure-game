@@ -35,6 +35,7 @@ monsters = {
         "trigger_percentage":10,
         "send_percentage":45,
         },
+    "story":"ice boss",
 },
 "demon boss":{
       "attack":{
@@ -42,6 +43,7 @@ monsters = {
         "trigger_percentage":10,
         "send_percentage":50,
         },
+    "story":"ice boss",
 },
 }
 
@@ -102,7 +104,7 @@ class Game:
         self.state = "walk"
         self.font = pygame.font.SysFont("Inkfree", 30)
         self.screen = screen
-        self.user = Entity(animations["main character"]["idle"], 250)
+        self.user = Entity(animations["main character"]["idle"], 100)
         self.monster = Entity(animations["ice boss"]["idle"], 20)
         self.spell = Entity(animations['water heavy']['repeat'])
 
@@ -133,9 +135,9 @@ class Game:
     def get_input(self):
         return pygame.key.get_pressed()
 
-    def create_text_box(self, text):
+    def create_text_box(self, text, speed = 0.1):
         ground_margin = 10
-        self.text_box = TextBox(self.screen, (1600, 300), "gray", text, self.font, "black", 0.1)
+        self.text_box = TextBox(self.screen, (1600, 300), "gray", text, self.font, "black", speed)
         self.ground_hight = self.text_box.box_size[1] + ground_margin
 
     def event_box_collision(self):
@@ -181,9 +183,9 @@ class Game:
 
     def user_turn(self):
         if self.text_box == None:
-            text = "1 heavy water spell 30 damage        2 light water spell 10 damage \n \n 3 heavy fire spell 30 damage        "
-            text += "4 light fire spell 10 damage \n \n 5 heavy electric spell 30 damage        6 light electric spell 10 damage"
-            self.create_text_box(text)
+            text = "1 heavy water spell 30 damage         2 light water spell 10 damage \n \n 3 heavy fire spell 30 damage           "
+            text += "4 light fire spell 10 damage \n \n 5 heavy electric spell 30 damage       6 light electric spell 10 damage"
+            self.create_text_box(text, 0.3)
 
         self.get_user_attack()
         if self.current_spell != False:
@@ -214,6 +216,7 @@ class Game:
                             self.spell_movement = 0
                             self.spell_ended = True
                     if self.animation_percentage(self.spell) >= animation_settings[self.current_spell]["hurt_percentage"]:
+                        print("hit mon")
                         if self.monster.take_damage(10) <= 0:
                             self.monster.animate(animations[self.boss_queue[0]]["death"], True, True,False,True)
                             self.state = "walk"
@@ -269,9 +272,9 @@ class Game:
 
 
         if self.animation_percentage(self.spell) >= animation_settings[self.current_spell]["hurt_percentage"] and self.spell_ended:
-            if self.user.take_damage(10) <= 0:
-                self.user.animate(animations["main character"]["death"])
-                self.state = "walk"
+            if self.user.take_damage(100) <= 0:
+                self.user.animate(animations["main character"]["death"],True,True,kill=True)
+                self.state = "game over"
             
             else:
                 self.user.animate(animations["main character"]["take hit"],True,True)
