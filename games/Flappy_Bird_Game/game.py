@@ -1,7 +1,7 @@
 import pygame
 import sys
 import random
-
+from components.sound import Sound
 
 class FlappyBirdGame:
     def __init__(self):
@@ -33,7 +33,9 @@ class FlappyBirdGame:
         self.high_score = 0
         self.game_font = pygame.font.Font('games/Flappy_Bird_Game/assets/font/04B_19.TTF', 30)
 
-
+        self.sound1 = Sound('games/Flappy_Bird_Game/sound/sfx_hit.wav')
+        self.sound2 = Sound('games/Flappy_Bird_Game/sound/sfx_point.wav')
+        self.sound3 = Sound('games/Flappy_Bird_Game/sound/sfx_wing.wav')
 
         self.load_assets()
         self.create_birds()
@@ -63,9 +65,9 @@ class FlappyBirdGame:
         self.game_over_surface = pygame.image.load('games/Flappy_Bird_Game/assets/message.png').convert_alpha()
         self.game_over_rect = self.game_over_surface.get_rect(center=(144, 256))
 
-        self.flap_sound = pygame.mixer.Sound('games/Flappy_Bird_Game/sound/sfx_wing.wav')
-        self.death_sound = pygame.mixer.Sound('games/Flappy_Bird_Game/sound/sfx_hit.wav')
-        self.score_sound = pygame.mixer.Sound('games/Flappy_Bird_Game/sound/sfx_point.wav')
+        # self.flap_sound = pygame.mixer.Sound('games/Flappy_Bird_Game/sound/sfx_wing.wav')
+        # self.death_sound = pygame.mixer.Sound('games/Flappy_Bird_Game/sound/sfx_hit.wav')
+        # self.score_sound = pygame.mixer.Sound('games/Flappy_Bird_Game/sound/sfx_point.wav')
         self.score_sound_countdown = 100
 
     def create_birds(self):
@@ -118,14 +120,14 @@ class FlappyBirdGame:
     def check_collision(self):
         for pipe in self.pipe_list:
             if self.bird_rect.colliderect(pipe):
-                self.death_sound.play()
+                self.sound1.play()
                 return False
 
         if (
             self.bird_rect.colliderect(self.bird2_rect)
             or self.bird_rect.colliderect(self.bird3_rect)
         ):
-            self.death_sound.play()
+            self.sound1.play()
             return False
 
         if self.bird_rect.top <= -100 or self.bird_rect.bottom >= 420:
@@ -162,7 +164,7 @@ class FlappyBirdGame:
         if self.score > self.high_score:
             self.high_score = self.score
 
-    def run(self):
+    def play(self):
         running = True
         while running:
             for event in pygame.event.get():
@@ -173,7 +175,7 @@ class FlappyBirdGame:
                     if event.key == pygame.K_SPACE and self.game_active:
                         self.bird_movement = 0
                         self.bird_movement -= 6
-                        self.flap_sound.play()
+                        self.sound3.play()
                     if event.key == pygame.K_SPACE and not self.game_active:
                         self.game_active = True
                         self.pipe_list.clear()
@@ -212,7 +214,7 @@ class FlappyBirdGame:
                 self.score += 0.01
                 self.score_sound_countdown -= 1
                 if self.score_sound_countdown <= 0:
-                    self.score_sound.play()
+                    self.sound2.play()
                     self.score_sound_countdown = 100
             else:
                 self.screen.blit(self.game_over_surface, self.game_over_rect)
@@ -249,4 +251,4 @@ class FlappyBirdGame:
             self.clock.tick(60)
 
 game = FlappyBirdGame()
-game.run()
+game.play()
