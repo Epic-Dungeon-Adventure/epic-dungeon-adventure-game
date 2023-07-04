@@ -13,7 +13,7 @@ class TextBox():
         self.font = font
         self.font_color = font_color
         self.speed = speed
-        
+
         self.words = text.split(" ")
         self.rendered_lines = []
         self.space_width = font.size(' ')[0]

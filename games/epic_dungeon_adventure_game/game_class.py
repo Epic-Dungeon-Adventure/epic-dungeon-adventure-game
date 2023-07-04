@@ -12,10 +12,19 @@ animations = get_animations()
 levels = {
     "dark woods":{
         "background":("./games/epic_dungeon_adventure_game/assets/background/dark_woods/Layer", 8),
+        "background music":"PATH",
         "monsters":["ice boss", "demon boss"],
     },
+
     "rock cave":{
         "background":("./games/epic_dungeon_adventure_game/assets/background/rock_cave/Layer", 5),
+        "background music":"PATH",
+        "monsters":["ice boss", "demon boss"],
+    },
+
+    "red forest":{
+        "background":("./games/epic_dungeon_adventure_game/assets/background/red_forest/", 7),
+        "background music":"PATH",
         "monsters":["ice boss", "demon boss"],
     }
 }
@@ -45,7 +54,7 @@ monsters = {
         "trigger_percentage":10,
         "send_percentage":50,
         },
-    "story":"ice boss",
+    "story":"demon boss",
 },
 
 "bringer of death":{
@@ -54,83 +63,102 @@ monsters = {
         "trigger_percentage":100,
         "send_percentage":50,
         },
-    "story":"ice boss",
+    "story":"The Bringer of Death emerges from the shadows, wielding a wicked scythe. Cloaked in"+
+    "darkness, they exude an aura of doom. Prepare to confront this merciless reaper and face the harvester of life.",
 },
 }
 
 animation_settings = {
-    ("water heavy"):{
+    "water heavy":{
         "repeat speed":0.2,
         "element":"water",
         "trigger_percentage":90,
-        "hurt_percentage":50,
+        "hurt_percentage":10,
+        "damage":40,
+        "stamina cost":30,
     },
 
-    ("water light"):{
+    "water light":{
         "start speed":0.1,
         "repeat speed":0.5,
         "end speed":0.3,
         "element":"water",
         "trigger_percentage":50,
         "hurt_percentage":20,
+        "damage":20,
+        "stamina cost":10,
     },
 
-    ("fire heavy"):{
+    "fire heavy":{
         "repeat speed":0.12,
         "element":"fire",
         "trigger_percentage":90,
         "hurt_percentage":50,
+        "damage":40,
+        "stamina cost":30,
     },
 
-    ("fire light"):{
+    "fire light":{
         "start speed":0.2,
         "repeat speed":0.2,
         "end speed":0.4,
         "element":"fire",
         "trigger_percentage":60,
         "hurt_percentage":20,
+        "damage":20,
+        "stamina cost":10,
     },
 
-    ("electric heavy"):{
+    "electric heavy":{
         "repeat speed":0.2,
         "element":"electric",
         "trigger_percentage":90,
         "hurt_percentage":50,
+        "damage":40,
+        "stamina cost":30,
     },
 
-    ("electric light"):{
+    "electric light":{
         "start speed":0.1,
         "repeat speed":0.2,
         "end speed":0.15,
         "element":"electric",
         "trigger_percentage":50,
         "hurt_percentage":20,
+        "damage":20,
+        "stamina cost":10,
     },
-    
-    ("shadow heavy"):{
+
+    "shadow heavy":{
         "repeat speed":0.2,
         "element":"electric",
         "trigger_percentage":90,
         "hurt_percentage":50,
+        "damage":40,
+        "stamina cost":30,
     },
 }
 
 class Game:
-    def __init__(self, screen):
-        self.level = "dark woods"
+    def __init__(self, screen, level = "red forest"):
+        self.level = level
+        self.monster_health = 100
+        self.monster_damage = 40
+        self.user_health = 400
+        self.user_stamina = 200
+        self.user_stamina_recovery = 20
         self.state = "walk"
-        self.font = pygame.font.SysFont("Inkfree", 30)
+        self.font = pygame.font.Font("C:/Windows/Fonts/cour.ttf",28)
         self.screen = screen
-        self.user = Entity(animations["main character"]["idle"], 400)
-        self.monster = Entity(animations["bringer of death"]["idle"], 20)
+        self.user = Entity(animations["main character"]["idle"], self.user_health)
+        self.monster = Entity(animations["bringer of death"]["idle"], self.monster_health)
         self.spell = Entity(animations['water heavy']['repeat'])
-
+ 
         self.event_box = Entity([pygame.Surface((50, 50))])
         self.event_box.image.fill("white")
         self.event_box.image.set_alpha(100)
-        self.event_box.rect.topleft = (200, 400)
+        self.event_box.rect.topleft = (1600, 400)
 
-        self.event_queue = ["tell story", "user turn", "walk"]
         self.boss_queue = ["bringer of death","ice boss", "demon boss"]
         self.story_queue = ["In the depths of a frozen cavern, amidst towering ice walls and glittering icicles, an awe-inspiring ice dragon awaits your arrival. Its colossal body, adorned with shimmering scales of ice, emanates an intense coldness that permeates the chamber. As the dragon fixes its piercing gaze upon you, its voice resonates with ancient wisdom, questioning your purpose in its icy domain. With a mixture of wonder and trepidation, your fate becomes intertwined with this majestic creature, as you stand on the threshold of a chilling and thrilling adventure."]
         self.text_box = None
@@ -149,9 +177,9 @@ class Game:
 
         self.backgrounds = [Terrain(levels[self.level]["background"][0]+str(num)+".png", 1600, 800, (0,0),num / 3) for num in range(1,levels[self.level]["background"][1])]
 
-        self.user_health_bar = Bar(10, 10, 200, 20, 400, (255, 0, 0))
-        self.user_stamina_bar = Bar(10, 40, 200, 20, 200, (0, 255, 255))
-        self.monster_health_bar =  Bar(1390, 10, 200, 20, 20, (0, 0, 255))
+        self.user_health_bar = Bar(10, 10, 300, 20, self.user_health, "red")
+        self.user_stamina_bar = Bar(10, 40, 300, 20, self.user_stamina, "yellow")
+        self.monster_health_bar =  Bar(1290, 10, 300, 20, self.monster_health, "red")
 
     def get_input(self):
         return pygame.key.get_pressed()
@@ -166,19 +194,20 @@ class Game:
         self.state_intilized = False
         self.event_box.rect.topleft = (800, 400)
         self.user.animate(self.user.default_animation, True)
-        self.monster = Entity(animations[self.boss_queue[0]]["idle"],20)
+        self.monster = Entity(animations[self.boss_queue[0]]["idle"],self.monster_health)
         self.group.add(self.monster)
 
     def tell_story(self):
+        self.current_monster = self.boss_queue[0]
+
         if self.text_box == None:
-            text = self.story_queue[0]
+            text = monsters[self.current_monster]["story"]
             self.create_text_box(text)
         
         keys = self.get_input()
         if keys[pygame.K_SPACE]:
             self.text_box = None
             self.state = "user turn"
-        self.current_monster = self.boss_queue[0]
 
     @staticmethod
     def animation_percentage(entity):
@@ -212,16 +241,14 @@ class Game:
         if self.current_spell != False:
             if self.animation_percentage(self.user) >= animation_settings[self.current_spell]["trigger_percentage"] and self.user_attacked:
                 self.group.add(self.spell)
-                
+
                 if not 'heavy' in self.current_spell and not self.spell_started:
                     self.spell.animate(animations[self.current_spell]['start'],True,True,speed=animation_settings[self.current_spell]["start speed"])
                     self.spell_started = True
                     self.spell.rect.midleft = self.user.rect.midright
-                
+
                 if self.spell.animation_complete and self.spell_started:
                     self.spell_movement = 5
-
-
 
                 if 'heavy' in self.current_spell and not self.spell_started:
                     self.spell.rect.bottomleft = self.monster.rect.bottomleft
@@ -237,14 +264,14 @@ class Game:
                             self.spell_movement = 0
                             self.spell_ended = True
                     if self.animation_percentage(self.spell) >= animation_settings[self.current_spell]["hurt_percentage"]:
-                        self.monster_health_bar.update_health(10)
-                        self.user_stamina_bar.update_stamina(30)
-                        if self.monster.take_damage(10) <= 0:
+                        self.monster_health_bar.update_health(animation_settings[self.current_spell]["damage"])
+                        self.user_stamina_bar.update_stamina(animation_settings[self.current_spell]["stamina cost"])
+                        if self.monster.take_damage(animation_settings[self.current_spell]["damage"]) <= 0:
                             self.monster.animate(animations[self.boss_queue[0]]["death"], True, True,False,True)
                             self.state = "walk"
                             self.boss_queue.pop(0)
                             self.user_attacked = False
-                            self.monster_health_bar = Bar(1390, 10, 200, 20,20, (0, 0, 255))
+                            self.monster_health_bar = Bar(1290, 10, 300, 20, self.monster_health, "red")
 
                         else:
                             self.monster.animate(animations[self.boss_queue[0]]["take hit"], True, True)
@@ -255,6 +282,8 @@ class Game:
                         self.spell_ended = False
 
     def monster_turn(self):
+        # level = "rock cave"
+        # self.__init__(self.screen, level)
         self.user_attacked = False
         if self.monster_attacked == False and not self.group.has(self.spell):
             self.monster.animate(animations[self.current_monster]["attack"], True, True)
@@ -300,8 +329,8 @@ class Game:
                 self.spell.rect.midbottom = self.user.rect.midbottom
         
         if self.animation_percentage(self.spell) >= animation_settings[self.current_spell]["hurt_percentage"] and self.spell_ended:
-            self.user_health_bar.update_health(100)
-            if self.user.take_damage(100) <= 0:
+            self.user_health_bar.update_health(self.monster_damage)
+            if self.user.take_damage(self.monster_damage) <= 0:
                 self.user.animate(animations["main character"]["death"],True,True,kill=True)
                 self.state = "game over"
             
@@ -363,10 +392,7 @@ class Game:
         if self.text_box:
             self.text_box.render_words()
         
-        if self.state != "walk":  
+        if self.state != "walk":
             self.user_stamina_bar.draw(self.screen)   
             self.user_health_bar.draw(self.screen)
             self.monster_health_bar.draw(self.screen)
-
-# cut sprites perfcetly
-# use rect.center for consistant position
