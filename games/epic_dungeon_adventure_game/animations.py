@@ -5,6 +5,7 @@ def get_animations():
 
     animations = {
         "bringer of death":{},
+        "necromancer":{},
         "ice boss":{},
         "demon boss":{},
         "main character":{
@@ -19,6 +20,9 @@ def get_animations():
         "fire heavy":{},
         "fire light":{},
         "shadow heavy":{},
+        "halloween heavy":{},
+        "ice light":{},
+        "ice heavy":{},
     }
 
 
@@ -77,7 +81,6 @@ def get_animations():
     ice_death = Animation(path_list, 300, 300)
     animations['ice boss']['idle'] =ice_death.farme_list
 
-
     path_list = ['games/epic_dungeon_adventure_game/assets/monsters/ice_boss/attack/1_atk_' + str(num) + '.png' for num in range(1,15)]
     ice_death = Animation(path_list, 400, 400)
     animations['ice boss']['attack'] =ice_death.farme_list
@@ -96,7 +99,6 @@ def get_animations():
     path_list = ['games/epic_dungeon_adventure_game/assets/monsters/demon_boss/idle/demon_idle_' + str(num) + '.png' for num in range(1,7)]
     ice_death = Animation(path_list, 400, 400)
     animations['demon boss']['idle'] = ice_death.farme_list
-
 
     path_list = ['games/epic_dungeon_adventure_game/assets/monsters/demon_boss/attack/demon_cleave_' + str(num) + '.png' for num in range(1,16)]
     ice_death = Animation(path_list, 400, 400)
@@ -130,6 +132,21 @@ def get_animations():
 
 
 
+    path_list = ['games/epic_dungeon_adventure_game/assets/monsters/necromancer/idle/tile' + str(num).zfill(3) + '.png' for num in range(1,9)]
+    ice_death = Animation(path_list, 400, 400)
+    animations['necromancer']['idle'] = ice_death.farme_list
+
+    path_list = ['games/epic_dungeon_adventure_game/assets/monsters/necromancer/attack/tile' + str(num).zfill(3) + '.png' for num in range(1,14)]
+    ice_death = Animation(path_list, 400, 400)
+    animations['necromancer']['attack'] = ice_death.farme_list
+
+    path_list = ['games/epic_dungeon_adventure_game/assets/monsters/necromancer/death/tile' + str(num).zfill(3) + '.png' for num in range(1,10)]
+    ice_death = Animation(path_list, 400, 400)
+    animations['necromancer']['death'] = ice_death.farme_list
+
+    path_list = ['games/epic_dungeon_adventure_game/assets/monsters/necromancer/take_hit/tile' + str(num).zfill(3) + '.png' for num in range(1,6)]
+    ice_death = Animation(path_list, 400, 400)
+    animations['necromancer']['take hit'] = ice_death.farme_list
 
 #                                                   Monsters
 
@@ -179,7 +196,6 @@ def get_animations():
     animations['electric heavy']['repeat'] = ice_death.farme_list
 
     path_list = ['games/epic_dungeon_adventure_game/assets/spells/light_electric/start/tile' + str(num).zfill(3) + '.png' for num in range(0,8)]
-
     ice_death = Animation(path_list, 200, 200)
     animations['electric light']['start'] = ice_death.farme_list
 
@@ -198,4 +214,30 @@ def get_animations():
     ice_death = Animation(path_list, 600, 600)
     animations['shadow heavy']['repeat'] = ice_death.farme_list
     
+
+
+
+    path_list = ['games/epic_dungeon_adventure_game/assets/spells/heavy_halloween/tile' + str(num).zfill(3) + '.png' for num in range(0,27)]
+    ice_death = Animation(path_list, 400, 400)
+    animations['halloween heavy']['repeat'] = ice_death.farme_list
+
+
+
+
+
+    path_list = ['games/epic_dungeon_adventure_game/assets/spells/heavy_ice/' + str(num) + '.png' for num in range(1,37)]
+    ice_death = Animation(path_list, 400, 400)
+    animations['ice heavy']['repeat'] = ice_death.farme_list
+
+    path_list = ['games/epic_dungeon_adventure_game/assets/spells/light_ice/start/tile' + str(num).zfill(3) + '.png' for num in range(0,3)]  
+    ice_death = Animation(path_list, 200, 200)
+    animations['ice light']['start'] = ice_death.farme_list
+
+    path_list = ['games/epic_dungeon_adventure_game/assets/spells/light_ice/repeat/tile' + str(num).zfill(3) + '.png' for num in range(0,10)]
+    ice_death = Animation(path_list, 200, 200)
+    animations['ice light']['repeat'] = ice_death.farme_list
+
+    path_list = ['games/epic_dungeon_adventure_game/assets/spells/light_ice/end/tile' + str(num).zfill(3) + '.png' for num in range(0,8)]
+    ice_death = Animation(path_list, 400, 400)
+    animations['ice light']['end'] = ice_death.farme_list
     return animations

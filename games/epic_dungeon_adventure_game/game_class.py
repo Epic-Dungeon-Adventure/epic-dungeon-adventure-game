@@ -1,5 +1,5 @@
 import pygame
-from random import randint, choice
+from random import choice
 from components.entitty import Entity
 from components.text_box import TextBox
 from components.sound import Sound
@@ -41,8 +41,8 @@ spells = {
 monsters = {
 "ice boss":{
     "attack":{
-        "spell":"fire light",
-        "trigger_percentage":10,
+        "spell":["ice light", "ice heavy"],
+        "trigger_percentage":40,
         "send_percentage":45,
         },
     "story":"ice boss",
@@ -50,7 +50,7 @@ monsters = {
 
 "demon boss":{
       "attack":{
-        "spell":"fire light",
+        "spell":["fire light"],
         "trigger_percentage":10,
         "send_percentage":50,
         },
@@ -59,7 +59,17 @@ monsters = {
 
 "bringer of death":{
       "attack":{
-        "spell":"shadow heavy",
+        "spell":["shadow heavy"],
+        "trigger_percentage":100,
+        "send_percentage":50,
+        },
+    "story":"The Bringer of Death emerges from the shadows, wielding a wicked scythe. Cloaked in"+
+    "darkness, they exude an aura of doom. Prepare to confront this merciless reaper and face the harvester of life.",
+},
+
+"necromancer":{
+      "attack":{
+        "spell":["shadow heavy","halloween heavy"],
         "trigger_percentage":100,
         "send_percentage":50,
         },
@@ -131,17 +141,54 @@ animation_settings = {
 
     "shadow heavy":{
         "repeat speed":0.2,
-        "element":"electric",
+        "element":"shadow",
         "trigger_percentage":90,
         "hurt_percentage":50,
         "damage":40,
         "stamina cost":30,
     },
+
+    "halloween heavy":{
+        "repeat speed":0.2,
+        "element":"halloween",
+        "trigger_percentage":90,
+        "hurt_percentage":70,
+        "damage":40,
+        "stamina cost":30,
+    },
+
+    "ice light":{
+        "start speed":0.2,
+        "repeat speed":0.2,
+        "end speed":0.2,
+        "element":"fire",
+        "trigger_percentage":60,
+        "hurt_percentage":20,
+        "damage":20,
+        "stamina cost":10,
+    },
+
+    "ice heavy":{
+        "repeat speed":0.2,
+        "element":"ice",
+        "trigger_percentage":90,
+        "hurt_percentage":50,
+        "damage":40,
+        "stamina cost":30,
+    },
+
+    "ice boss":{
+        "idle":{"speed":0.13},
+        "take hit":{"speed":0.14},
+        "death":{"speed":0.15},
+        "attack":{"speed":0.14},
+    }
 }
 
 class Game:
-    def __init__(self, screen, level = "red forest"):
+    def __init__(self, screen, level = "dark woods", level_num = 0):
         self.level = level
+        self.completed_levels = level_num
         self.monster_health = 100
         self.monster_damage = 40
         self.user_health = 400
@@ -157,9 +204,9 @@ class Game:
         self.event_box = Entity([pygame.Surface((50, 50))])
         self.event_box.image.fill("white")
         self.event_box.image.set_alpha(100)
-        self.event_box.rect.topleft = (1600, 400)
+        self.event_box.rect.topleft = (400, 400)
 
-        self.boss_queue = ["bringer of death","ice boss", "demon boss"]
+        self.boss_queue = ["necromancer", "bringer of death", "ice boss", "demon boss"]
         self.story_queue = ["In the depths of a frozen cavern, amidst towering ice walls and glittering icicles, an awe-inspiring ice dragon awaits your arrival. Its colossal body, adorned with shimmering scales of ice, emanates an intense coldness that permeates the chamber. As the dragon fixes its piercing gaze upon you, its voice resonates with ancient wisdom, questioning your purpose in its icy domain. With a mixture of wonder and trepidation, your fate becomes intertwined with this majestic creature, as you stand on the threshold of a chilling and thrilling adventure."]
         self.text_box = None
         self.group = pygame.sprite.Group()
@@ -178,8 +225,12 @@ class Game:
         self.backgrounds = [Terrain(levels[self.level]["background"][0]+str(num)+".png", 1600, 800, (0,0),num / 3) for num in range(1,levels[self.level]["background"][1])]
 
         self.user_health_bar = Bar(10, 10, 300, 20, self.user_health, "red")
-        self.user_stamina_bar = Bar(10, 40, 300, 20, self.user_stamina, "yellow")
+        self.user_stamina_bar = Bar(10, 40, 300, 8, self.user_stamina, "white")
         self.monster_health_bar =  Bar(1290, 10, 300, 20, self.monster_health, "red")
+
+    def new_level(self):
+        level = levels.keys()[self.completed_levels]
+        self.__init__(self.screen, level, self.completed_levels + 1)
 
     def get_input(self):
         return pygame.key.get_pressed()
@@ -194,12 +245,13 @@ class Game:
         self.state_intilized = False
         self.event_box.rect.topleft = (800, 400)
         self.user.animate(self.user.default_animation, True)
-        self.monster = Entity(animations[self.boss_queue[0]]["idle"],self.monster_health)
+        self.current_monster = self.boss_queue[0]
+        self.current_monster = "ice boss"
+        self.monster = Entity(animations[self.current_monster]["idle"],self.monster_health,default_speed=animation_settings[self.current_monster]["idle"]["speed"])
         self.group.add(self.monster)
 
     def tell_story(self):
-        self.current_monster = self.boss_queue[0]
-
+        
         if self.text_box == None:
             text = monsters[self.current_monster]["story"]
             self.create_text_box(text)
@@ -248,7 +300,7 @@ class Game:
                     self.spell.rect.midleft = self.user.rect.midright
 
                 if self.spell.animation_complete and self.spell_started:
-                    self.spell_movement = 5
+                    self.spell_movement = 15
 
                 if 'heavy' in self.current_spell and not self.spell_started:
                     self.spell.rect.bottomleft = self.monster.rect.bottomleft
@@ -267,14 +319,14 @@ class Game:
                         self.monster_health_bar.update_health(animation_settings[self.current_spell]["damage"])
                         self.user_stamina_bar.update_stamina(animation_settings[self.current_spell]["stamina cost"])
                         if self.monster.take_damage(animation_settings[self.current_spell]["damage"]) <= 0:
-                            self.monster.animate(animations[self.boss_queue[0]]["death"], True, True,False,True)
+                            self.monster.animate(animations[self.current_monster]["death"], True, True,False,True,animation_settings[self.current_monster]["death"]["speed"])
                             self.state = "walk"
                             self.boss_queue.pop(0)
                             self.user_attacked = False
                             self.monster_health_bar = Bar(1290, 10, 300, 20, self.monster_health, "red")
 
                         else:
-                            self.monster.animate(animations[self.boss_queue[0]]["take hit"], True, True)
+                            self.monster.animate(animations[self.current_monster]["take hit"], True, True,speed=animation_settings[self.current_monster]["take hit"]["speed"])
                             self.state = "monster turn"
                         self.current_spell = False
                         self.spell_movement = 0
@@ -282,13 +334,11 @@ class Game:
                         self.spell_ended = False
 
     def monster_turn(self):
-        # level = "rock cave"
-        # self.__init__(self.screen, level)
         self.user_attacked = False
         if self.monster_attacked == False and not self.group.has(self.spell):
-            self.monster.animate(animations[self.current_monster]["attack"], True, True)
+            self.monster.animate(animations[self.current_monster]["attack"], True, True,speed=animation_settings[self.current_monster]["attack"]["speed"])
             self.monster_attacked = True
-            self.current_spell = monsters[self.current_monster]["attack"]["spell"]
+            self.current_spell = choice(monsters[self.current_monster]["attack"]["spell"])
             kill_spell = False
             if "heavy" in self.current_spell:
                 kill_spell = True
