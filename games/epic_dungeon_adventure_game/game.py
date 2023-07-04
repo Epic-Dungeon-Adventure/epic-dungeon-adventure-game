@@ -9,7 +9,7 @@ from .game_class import Game
 
 pygame.init()
 screen = pygame.display.set_mode((1600, 800))
-pygame.display.set_caption("Runner")
+pygame.display.set_caption("Epic Dungeon Adventure")
 clock = pygame.time.Clock()
 
 animations = get_animations()
@@ -25,7 +25,7 @@ def play():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-
+        # will handle pause menu here if esc pressed
         
 
         screen.fill((0, 0, 0))
