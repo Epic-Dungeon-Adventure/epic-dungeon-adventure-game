@@ -1,11 +1,8 @@
 import pygame
 from sys import exit
-from random import randint, choice
-from components.entitty import Entity
-from components.text_box import TextBox
-from components.sound import Sound
 from .animations import get_animations
 from .game_class import Game
+from .menu import GameOverMenu,MainMenu,PauseMenu
 
 pygame.init()
 screen = pygame.display.set_mode((1600, 800))
@@ -16,10 +13,18 @@ animations = get_animations()
 
 game = Game(screen)
 
+def play():
+   global game 
+   game = Game(screen)
+   game.state = "walk"
+
+
+
+# game_over_menu = GameOverMenu(screen, play)
+main_menu = MainMenu(screen, play)
+# pause_menu = PauseMenu(screen, play)
 
 def play():
-    global posx
-    global posy
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -27,11 +32,14 @@ def play():
                 exit()
         # will handle pause menu here if esc pressed
         
-
-        screen.fill((0, 0, 0))
-        game.draw()
-        game.update_state()
+        if game.state == "main menu":
+            main_menu.run_menu()
+        else:
+            screen.fill((0, 0, 0))
+            game.draw()
+            game.update_state()
        
         pygame.display.update()
+        print(game.state)
         # print(clock.get_fps())
         clock.tick(60)

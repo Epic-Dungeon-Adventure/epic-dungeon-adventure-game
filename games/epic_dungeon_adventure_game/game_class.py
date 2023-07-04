@@ -216,7 +216,7 @@ class Game:
         self.user_health = 400
         self.user_stamina = 200
         self.user_stamina_recovery = 20
-        self.state = "walk"
+        self.state = "main menu"
         self.font = pygame.font.Font("C:/Windows/Fonts/cour.ttf",28)
         self.screen = screen
         self.user = Entity(animations["main character"]["idle"], self.user_health)
@@ -446,6 +446,7 @@ class Game:
 
         if self.state == "walk" and self.monster.animation_complete and self.user.animation_complete:
             self.walk()
+        
 
     def draw(self):
         for background in self.backgrounds:

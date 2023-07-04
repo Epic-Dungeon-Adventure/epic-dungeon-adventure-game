@@ -1,22 +1,22 @@
 import pygame
 import sys
 import os
-from games.epic_dungeon_adventure_game.game import play
+
 
 class Menu:
-    def __init__(self, window_width, window_height, caption, background_image_path):
+    def __init__(self, screen, caption, background_image_path):
         pygame.init()
-        self.window_width = window_width
-        self.window_height = window_height
-        
-        self.window = pygame.display.set_mode((window_width, window_height))
+        self.window_width = screen.get_width()
+        self.window_height = screen.get_height()
+        self.exit = False
+        self.window = screen
         pygame.display.set_caption(caption)
 
         current_dir = os.path.dirname(os.path.abspath(__file__))
         assets_dir = os.path.join(current_dir, "assets", "menu")
 
         self.background_image = pygame.image.load(os.path.join(assets_dir, background_image_path)).convert_alpha()
-        self.background_image = pygame.transform.scale(self.background_image, (window_width, window_height))
+        self.background_image = pygame.transform.scale(self.background_image, (self.window_width, self.window_height))
 
         self.button_group = pygame.sprite.Group()
 
@@ -34,25 +34,32 @@ class Menu:
         pygame.display.flip()
 
     def run_menu(self):
-        while True:
+        while self.exit == False:
             self.handle_events()
             self.update_screen()
 
+    def quit(self):
+        pygame.quit()
+        sys.exit()
+
+    def exit_menu(self):
+        self.exit = True
+        print("called")
 
 class MainMenu(Menu):
-    def __init__(self, window_width, window_height):
-        super().__init__(window_width, window_height, "menu", "background.png")
+    def __init__(self, screen, play):
+        super().__init__(screen, "menu", "background.png")
 
         current_dir = os.path.dirname(os.path.abspath(__file__))
         assets_dir = os.path.join(current_dir, "assets", "menu")
 
-        button_x = window_width // 2
-        play_button_y = window_height // 2 - 120
-        about_button_y = window_height // 2
-        quit_button_y = window_height // 2 + 120
+        button_x = self.window_width // 2
+        play_button_y = self.window_height // 2 - 120
+        about_button_y = self.window_height // 2
+        quit_button_y = self.window_height // 2 + 120
 
         class MenuButton(pygame.sprite.DirtySprite):
-            def __init__(self, x, y, on_image_path, off_image_path, func):
+            def __init__(self, x, y, on_image_path, off_image_path, func, exit_menu):
                 super().__init__()
                 self.on_image = pygame.image.load(os.path.join(assets_dir, on_image_path)).convert_alpha()
                 self.off_image = pygame.image.load(os.path.join(assets_dir, off_image_path)).convert_alpha()
@@ -60,6 +67,8 @@ class MainMenu(Menu):
                 self.rect = self.image.get_rect(center=(x, y))
                 self.state = "on"
                 self.func = func
+                self.exit_menu = exit_menu
+
 
             def handle_event(self, event):
                 if event.type == pygame.MOUSEMOTION:
@@ -73,6 +82,8 @@ class MainMenu(Menu):
                         mouse_pos = pygame.mouse.get_pos()
                         if self.rect.collidepoint(mouse_pos):
                             self.func()
+                            print(self.exit_menu)
+                            self.exit_menu()
 
             def update(self, event=None):
                 self.dirty = True
@@ -83,9 +94,9 @@ class MainMenu(Menu):
                 else:
                     self.image = self.off_image
 
-        play_button = MenuButton(button_x, play_button_y, "on/play_on.png", "off/play_off.png", play)
-        about_button = MenuButton(button_x, about_button_y, "on/about_on.png", "off/about_off.png", self.about_screen)
-        quit_button = MenuButton(button_x, quit_button_y, "on/quit_on.png", "off/quit_off.png", sys.exit)
+        play_button = MenuButton(button_x, play_button_y, "on/play_on.png", "off/play_off.png", play, self.exit_menu)
+        about_button = MenuButton(button_x, about_button_y, "on/about_on.png", "off/about_off.png", self.about_screen, self.exit_menu)
+        quit_button = MenuButton(button_x, quit_button_y, "on/quit_on.png", "off/quit_off.png", self.quit, self.exit_menu)
 
         self.button_group.add(play_button, about_button, quit_button)
 
@@ -133,20 +144,42 @@ class MainMenu(Menu):
             pygame.display.flip()
 
 
-class PauseMenu(Menu):
-    def __init__(self, window_width, window_height, resume_game_callback):
-        super().__init__(window_width, window_height, "Pause", "pause_menu.png")
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class PauseMenu(Menu):
+    def __init__(self, screen, resume_game):
+        super().__init__(screen, "Pause", "pause_menu.png")
 
         current_dir = os.path.dirname(os.path.abspath(__file__))
         assets_dir = os.path.join(current_dir, "assets", "menu")
 
-        button_x = window_width // 2
-        continue_button_y = window_height // 2 - 120
-        quit_button_y = window_height // 2
+        button_x = self.window_width // 2
+        continue_button_y = self.window_height // 2 - 120
+        quit_button_y = self.window_height // 2
 
         class MenuButton(pygame.sprite.DirtySprite):
-            def __init__(self, x, y, on_image_path, off_image_path, func):
+            def __init__(self, x, y, on_image_path, off_image_path, func, exit_menu):
                 super().__init__()
                 self.on_image = pygame.image.load(os.path.join(assets_dir, on_image_path)).convert_alpha()
                 self.off_image = pygame.image.load(os.path.join(assets_dir, off_image_path)).convert_alpha()
@@ -154,6 +187,7 @@ class PauseMenu(Menu):
                 self.rect = self.image.get_rect(center=(x, y))
                 self.state = "on"
                 self.func = func
+                self.exit_menu = exit_menu
 
             def handle_event(self, event):
                 if event.type == pygame.MOUSEMOTION:
@@ -167,6 +201,8 @@ class PauseMenu(Menu):
                         mouse_pos = pygame.mouse.get_pos()
                         if self.rect.collidepoint(mouse_pos):
                             self.func()
+                            self.exit_menu()
+                            
 
             def update(self, event=None):
                 self.dirty = True
@@ -176,31 +212,24 @@ class PauseMenu(Menu):
                     self.image = self.on_image
                 else:
                     self.image = self.off_image
-
-            def continue_game(self):
-                pygame.quit()  # Close the pause menu
-                self.resume_game_callback()  # Call the provided callback to resume the game
                 
-        continue_button = MenuButton(button_x, continue_button_y, "on/continue_on.png", "off/continue_off.png", self.continue_game)
-        quit_button = MenuButton(button_x, quit_button_y, "on/quit_on.png", "off/quit_off.png", sys.exit)
+        continue_button = MenuButton(button_x, continue_button_y, "on/continue_on.png", "off/continue_off.png", resume_game)
+        quit_button = MenuButton(button_x, quit_button_y, "on/quit_on.png", "off/quit_off.png", self.quit)
 
         self.button_group.add(continue_button, quit_button)
 
-    def continue_game(self):
-        pygame.quit()  # Close the pause menu
-        # Add code here to resume the game
-
 
 class GameOverMenu(Menu):
-    def __init__(self, window_width, window_height):
-        super().__init__(window_width, window_height, "menu", "game_over.png")
+    def __init__(self, screen, play_again):
+        super().__init__(screen, "menu", "game_over.png")
+        
 
         current_dir = os.path.dirname(os.path.abspath(__file__))
         assets_dir = os.path.join(current_dir, "assets", "menu")
 
-        button_x = window_width // 2
-        play_again_button_y = window_height // 2 - 120
-        quit_button_y = window_height // 2 + 120
+        button_x = self.window_width // 2
+        play_again_button_y = self.window_height // 2 - 120
+        quit_button_y = self.window_height // 2 + 120
 
         class MenuButton(pygame.sprite.DirtySprite):
             def __init__(self, x, y, on_image_path, off_image_path, func):
@@ -234,14 +263,11 @@ class GameOverMenu(Menu):
                 else:
                     self.image = self.off_image
 
-        play_again_button = MenuButton(button_x, play_again_button_y, "on/again_on.png", "off/again_off.png", self.play_again)
+        play_again_button = MenuButton(button_x, play_again_button_y, "on/again_on.png", "off/again_off.png", play_again)
         quit_button = MenuButton(button_x, quit_button_y, "on/quit_on.png", "off/quit_off.png", sys.exit)
 
         self.button_group.add(play_again_button, quit_button)
 
-    def play_again(self):
-        pygame.quit() 
-        play() 
 
 def game_over():
     pygame.init()  
