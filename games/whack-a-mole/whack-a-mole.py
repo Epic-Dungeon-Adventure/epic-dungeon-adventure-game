@@ -61,13 +61,14 @@ clock = pygame.time.Clock()
 class Mole:
     def __init__(self):
         self.positions = [(50, 450), (210, 460), (350, 460), (550, 460), (150, 370), (400, 360), (570, 370), (300, 400)]
-        # self.reset()
+
         self.respone=0
         self.position=(50, 450)
-        self.whacked=False
+        # self.whacked=True
+        self.reset()
     def move(self):
-        if not self.whacked:
-            self.reset()
+
+        self.reset()
 
 
     def check_collision(self, mouse_pos):
@@ -79,6 +80,7 @@ class Mole:
         return False
 
     def reset(self):
+
         if int(self.respone % 6) == 0:
             # print("hiiiiiiiii")
             self.position = random.choice(self.positions)
@@ -123,6 +125,7 @@ def draw_gameplay():
     screen.blit(quit_text, (SCREEN_WIDTH - quit_text.get_width() - 10, 10))
 
 # Main Game Loop
+
 while True:
     mouse_pos = pygame.mouse.get_pos()
     for event in pygame.event.get():
@@ -174,16 +177,17 @@ while True:
             palu_rect = palu_images[0].get_rect(center=mouse_pos)
             screen.blit(palu_images[0], palu_rect)
 
-        quit_text_rect = pygame.Rect(SCREEN_WIDTH - menu_font.size("Quit")[0] - 10, 10, menu_font.size("Quit")[0], menu_font.size("Quit")[1])
-        if quit_text_rect.collidepoint(mouse_pos):
-            game_state = "menu"
-            if score > best_score:
-                best_score = score
-            score = 0
-            moles_whacked = 0
+        if event.type == pygame.MOUSEBUTTONUP:
+            quit_text_rect = pygame.Rect(SCREEN_WIDTH - menu_font.size("Quit")[0] - 10, 10, menu_font.size("Quit")[0], menu_font.size("Quit")[1])
+            if quit_text_rect.collidepoint(mouse_pos):
+                game_state = "menu"
+                if score > best_score:
+                    best_score = score
+                score = 0
+                moles_whacked = 0
 
     # Animation
-    mole.respone += 0.19
+    mole.respone += 0.1
     current_frame += 0.1
     current_frame = (current_frame) % len(mole_images)
     # print(mole.respone)
