@@ -113,7 +113,8 @@ class Game:
 
         self.event_queue = ["tell story", "user turn", "walk"]
         self.boss_queue = ["ice boss", "demon boss"]
-        self.story_queue = ["In the depths of a frozen cavern, amidst towering ice walls and glittering icicles, an awe-inspiring ice dragon awaits your arrival. Its colossal body, adorned with shimmering scales of ice, emanates an intense coldness that permeates the chamber. As the dragon fixes its piercing gaze upon you, its voice resonates with ancient wisdom, questioning your purpose in its icy domain. With a mixture of wonder and trepidation, your fate becomes intertwined with this majestic creature, as you stand on the threshold of a chilling and thrilling adventure."]
+        self.story_queue = ["In the fiery abyss, a Fire Demon wields a colossal flaming sword. With a charred form and burning eyes, it radiates destructive power. Brace yourselves to confront this formidable adversary and its blazing fury."]
+        
         self.text_box = None
         self.group = pygame.sprite.Group()
         self.group.add(self.user)
@@ -272,6 +273,7 @@ class Game:
             if self.user.take_damage(10) <= 0:
                 self.user.animate(animations["main character"]["death"])
                 self.state = "walk"
+                # will call game over menu here
             
             else:
                 self.user.animate(animations["main character"]["take hit"],True,True)
