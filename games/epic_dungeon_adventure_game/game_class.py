@@ -13,7 +13,7 @@ levels = {
     "dark woods":{
         "background":("./games/epic_dungeon_adventure_game/assets/background/dark_woods/Layer", 8),
         "background music":"PATH",
-        "monsters":["ice boss", "demon boss"],
+        "monsters":["ice boss", "necromancer"],
     },
 
     "rock cave":{
@@ -25,7 +25,7 @@ levels = {
     "red forest":{
         "background":("./games/epic_dungeon_adventure_game/assets/background/red_forest/", 7),
         "background music":"PATH",
-        "monsters":["ice boss", "demon boss"],
+        "monsters":["necromancer", "demon boss"],
     }
 }
 
@@ -211,7 +211,7 @@ class Game:
     def __init__(self, screen, level = "dark woods", level_num = 0):
         self.level = level
         self.completed_levels = level_num
-        self.monster_health = 100
+        self.monster_health = 10
         self.monster_damage = 40
         self.user_health = 400
         self.user_stamina = 200
@@ -228,7 +228,7 @@ class Game:
         self.event_box.image.set_alpha(100)
         self.event_box.rect.topleft = (400, 400)
 
-        self.boss_queue = ["necromancer", "bringer of death", "ice boss", "demon boss"]
+        self.boss_queue = levels[self.level]["monsters"]
         self.story_queue = ["In the depths of a frozen cavern, amidst towering ice walls and glittering icicles, an awe-inspiring ice dragon awaits your arrival. Its colossal body, adorned with shimmering scales of ice, emanates an intense coldness that permeates the chamber. As the dragon fixes its piercing gaze upon you, its voice resonates with ancient wisdom, questioning your purpose in its icy domain. With a mixture of wonder and trepidation, your fate becomes intertwined with this majestic creature, as you stand on the threshold of a chilling and thrilling adventure."]
         self.text_box = None
         self.group = pygame.sprite.Group()
@@ -238,6 +238,7 @@ class Game:
         self.user_attacked = False
         self.monster_attacked = False
         self.ground_hight = 10
+        print(self.level,len(self.boss_queue))
         self.current_monster = self.boss_queue[0]
         self.current_spell = False
         self.spell_movement = 0
@@ -251,7 +252,7 @@ class Game:
         self.monster_health_bar =  Bar(1290, 10, 300, 20, self.monster_health, "red")
 
     def new_level(self):
-        level = levels.keys()[self.completed_levels]
+        level = list(levels.keys())[self.completed_levels + 1]
         self.__init__(self.screen, level, self.completed_levels + 1)
 
     def get_input(self):
@@ -267,13 +268,15 @@ class Game:
         self.state_intilized = False
         self.event_box.rect.topleft = (800, 400)
         self.user.animate(self.user.default_animation, True)
+        if len(self.boss_queue) == 0:
+            self.new_level()
+            return
         self.current_monster = self.boss_queue[0]
-        self.current_monster = "necromancer"
+        # self.current_monster = "necromancer"
         self.monster = Entity(animations[self.current_monster]["idle"],self.monster_health,default_speed=animation_settings[self.current_monster]["idle"]["speed"])
         self.group.add(self.monster)
 
     def tell_story(self):
-        
         if self.text_box == None:
             text = monsters[self.current_monster]["story"]
             self.create_text_box(text)
@@ -303,7 +306,6 @@ class Game:
                 self.user_attacked = True
                 self.spell = Entity(animations[self.current_spell]['repeat'], default_speed = animation_settings[self.current_spell]["repeat speed"])
                 self.spell.kill_after_animation = kill_spell              
-
 
     def user_turn(self):
         if self.text_box == None:
@@ -468,6 +470,7 @@ class Game:
             self.user_stamina_bar.draw(self.screen)   
             self.user_health_bar.draw(self.screen)
             self.monster_health_bar.draw(self.screen)
+        # print(self.completed_levels)
 
 
 # fix demon boss size then add rock boss and evil wizard
