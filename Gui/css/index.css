@@ -24,6 +24,19 @@ margin-left: 250px;
     margin-left: 75px;
 
 }
+#team {
+  font-size: 20px;
+  position: relative;
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+  margin-left:790px ;
+  /* z-index: 2; */
+  margin-top: -200px;
+}
+
+
+
+
 #libname{
 
   color:rgb(255, 255, 255);
@@ -321,6 +334,7 @@ box-shadow: 0 0 10px rgba(233, 233, 233, 0.918);
   cursor: pointer;
 }
 .play{
+  position: relative;
   background-color: rgba(60, 32, 85, 0.301);
   width: 250px;
   padding: 6px;
@@ -438,4 +452,18 @@ border-radius: 10px;
     font-size: 18px;
     margin-left: 5px;
   }
+}
+#game3Details{
+  background-image: url("../images/g3bk.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+#game2Details{
+    background-image: url("../images/bird.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+#flappydes{
+  margin-top: 80px;
+  margin-left: 30px;
 }
