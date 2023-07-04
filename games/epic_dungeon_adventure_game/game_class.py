@@ -51,8 +51,8 @@ monsters = {
 "demon boss":{
       "attack":{
         "spell":["fire light"],
-        "trigger_percentage":10,
-        "send_percentage":50,
+        "trigger_percentage":30,
+        "send_percentage":60,
         },
     "story":"demon boss",
 },
@@ -182,7 +182,29 @@ animation_settings = {
         "take hit":{"speed":0.14},
         "death":{"speed":0.15},
         "attack":{"speed":0.14},
-    }
+    },
+
+    "bringer of death":{
+        "idle":{"speed":0.1},
+        "take hit":{"speed":0.14},
+        "death":{"speed":0.15},
+        "attack":{"speed":0.14},
+    },
+
+    "necromancer":{
+        "idle":{"speed":0.13},
+        "take hit":{"speed":0.13},
+        "death":{"speed":0.15},
+        "attack":{"speed":0.18},
+    },
+#############
+    "demon boss":{
+        "idle":{"speed":0.13},
+        "take hit":{"speed":0.14},
+        "death":{"speed":0.15},
+        "attack":{"speed":0.14},
+    },
+#############
 }
 
 class Game:
@@ -200,7 +222,7 @@ class Game:
         self.user = Entity(animations["main character"]["idle"], self.user_health)
         self.monster = Entity(animations["bringer of death"]["idle"], self.monster_health)
         self.spell = Entity(animations['water heavy']['repeat'])
- 
+
         self.event_box = Entity([pygame.Surface((50, 50))])
         self.event_box.image.fill("white")
         self.event_box.image.set_alpha(100)
@@ -246,7 +268,7 @@ class Game:
         self.event_box.rect.topleft = (800, 400)
         self.user.animate(self.user.default_animation, True)
         self.current_monster = self.boss_queue[0]
-        self.current_monster = "ice boss"
+        self.current_monster = "necromancer"
         self.monster = Entity(animations[self.current_monster]["idle"],self.monster_health,default_speed=animation_settings[self.current_monster]["idle"]["speed"])
         self.group.add(self.monster)
 
@@ -446,3 +468,7 @@ class Game:
             self.user_stamina_bar.draw(self.screen)   
             self.user_health_bar.draw(self.screen)
             self.monster_health_bar.draw(self.screen)
+
+
+# fix demon boss size then add rock boss and evil wizard
+# add rock heavy spell
