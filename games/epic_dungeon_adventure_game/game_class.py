@@ -12,13 +12,13 @@ animations = get_animations()
 levels = {
     "dark woods":{
         "background":("./games/epic_dungeon_adventure_game/assets/background/dark_woods/Layer", 8),
-        "background music":"./games/epic_dungeon_adventure_game/assets/sound/dark woods background.mp3",
+        "background music":"./games/epic_dungeon_adventure_game/assets/sound/background/dark woods background.mp3",
         "monsters":["evil wizard", "bringer of death"],
     },
 
     "rock cave":{
-        "background":("./games/epic_dungeon_adventure_game/assets/background/rock_cave/Layer", 5),
-        "background music":"./games/epic_dungeon_adventure_game/assets/sound/rock cave background.mp3",
+        "background":("./games/epic_dungeon_adventure_game/assets/background/background/rock_cave/Layer", 5),
+        "background music":"./games/epic_dungeon_adventure_game/assets/sound/background/rock cave background.mp3",
         "monsters":["ice boss", "stone golem"],
     },
 
@@ -112,6 +112,7 @@ animation_settings = {
         "hurt_percentage":10,
         "damage":40,
         "stamina cost":30,
+        "cast sound":"./games/epic_dungeon_adventure_game/assets/sound/spell/fire light.wav",
     },
 
     "water light":{
@@ -123,6 +124,7 @@ animation_settings = {
         "hurt_percentage":20,
         "damage":20,
         "stamina cost":10,
+        "cast sound":"./games/epic_dungeon_adventure_game/assets/sound/spell/fire light.wav",
     },
 
     "fire heavy":{
@@ -132,6 +134,7 @@ animation_settings = {
         "hurt_percentage":50,
         "damage":40,
         "stamina cost":30,
+        "cast sound":"./games/epic_dungeon_adventure_game/assets/sound/spell/fire light.wav",
     },
 
     "fire light":{
@@ -143,6 +146,7 @@ animation_settings = {
         "hurt_percentage":20,
         "damage":20,
         "stamina cost":10,
+        "cast sound":"./games/epic_dungeon_adventure_game/assets/sound/spell/fire light.wav",
     },
 
     "electric heavy":{
@@ -152,6 +156,7 @@ animation_settings = {
         "hurt_percentage":50,
         "damage":40,
         "stamina cost":30,
+        "cast sound":"./games/epic_dungeon_adventure_game/assets/sound/spell/fire light.wav",
     },
 
     "electric light":{
@@ -163,6 +168,7 @@ animation_settings = {
         "hurt_percentage":20,
         "damage":20,
         "stamina cost":10,
+        "cast sound":"./games/epic_dungeon_adventure_game/assets/sound/spell/fire light.wav",
     },
 
     "shadow heavy":{
@@ -172,6 +178,7 @@ animation_settings = {
         "hurt_percentage":50,
         "damage":40,
         "stamina cost":30,
+        "cast sound":"./games/epic_dungeon_adventure_game/assets/sound/spell/fire light.wav",
     },
 
     "halloween heavy":{
@@ -181,6 +188,7 @@ animation_settings = {
         "hurt_percentage":70,
         "damage":40,
         "stamina cost":30,
+        "cast sound":"./games/epic_dungeon_adventure_game/assets/sound/spell/fire light.wav",
     },
 
     "ice light":{
@@ -192,6 +200,7 @@ animation_settings = {
         "hurt_percentage":20,
         "damage":20,
         "stamina cost":10,
+        "cast sound":"./games/epic_dungeon_adventure_game/assets/sound/spell/fire light.wav",
     },
 
     "ice heavy":{
@@ -201,7 +210,9 @@ animation_settings = {
         "hurt_percentage":50,
         "damage":40,
         "stamina cost":30,
+        "cast sound":"./games/epic_dungeon_adventure_game/assets/sound/spell/fire light.wav",
     },
+    
     "rock heavy":{
         "repeat speed":0.2,
         "element":"halloween",
@@ -209,6 +220,7 @@ animation_settings = {
         "hurt_percentage":70,
         "damage":40,
         "stamina cost":30,
+        "cast sound":"./games/epic_dungeon_adventure_game/assets/sound/spell/fire light.wav",
     },
 
     "ice boss":{
@@ -216,6 +228,8 @@ animation_settings = {
         "take hit":{"speed":0.14},
         "death":{"speed":0.15},
         "attack":{"speed":0.14},
+        "death sound":"Path",
+        "imunety":["water"],
     },
 
     "bringer of death":{
@@ -258,7 +272,7 @@ class Game:
     def __init__(self, screen, level = "dark woods", level_num = 0, inital_state = "walk"):
         self.level = level
         self.completed_levels = level_num
-        self.monster_health = 10
+        self.monster_health = 100
         self.monster_damage = 80
         self.user_health = 400
         self.user_stamina = 200
@@ -272,7 +286,7 @@ class Game:
 
         self.event_box = Entity([pygame.Surface((50, 50))])
         self.event_box.image.set_alpha(0)
-        self.event_box.rect.topleft = (screen.get_width(), 400)
+        self.event_box.rect.topleft = (screen.get_width()/4, 400)
 
         self.boss_queue = levels[self.level]["monsters"]
         self.story_queue = ["In the depths of a frozen cavern, amidst towering ice walls and glittering icicles, an awe-inspiring ice dragon awaits your arrival. Its colossal body, adorned with shimmering scales of ice, emanates an intense coldness that permeates the chamber. As the dragon fixes its piercing gaze upon you, its voice resonates with ancient wisdom, questioning your purpose in its icy domain. With a mixture of wonder and trepidation, your fate becomes intertwined with this majestic creature, as you stand on the threshold of a chilling and thrilling adventure."]
@@ -296,7 +310,8 @@ class Game:
         self.user_stamina_bar = Bar(10, 40, 300, 8, self.user_stamina, "white")
         self.monster_health_bar =  Bar(screen.get_width() - 310, 10, 300, 20, self.monster_health, "red")
 
-        self.background_music = Sound(levels[self.level]["background music"])
+        self.background_music = Sound(levels[self.level]["background music"],1)
+        self.spell_music = None
         
 
     def new_level(self):
@@ -357,7 +372,10 @@ class Game:
                     self.user.animate(animations["main character"]["light"][animation_settings[self.current_spell]["element"]], True, True)
                 self.user_attacked = True
                 self.spell = Entity(animations[self.current_spell]['repeat'], default_speed = animation_settings[self.current_spell]["repeat speed"])
-                self.spell.kill_after_animation = kill_spell              
+                self.spell.kill_after_animation = kill_spell
+                if self.spell_music == None:
+                    self.spell_music = Sound(animation_settings[self.current_spell]["cast sound"], 1)
+                    self.spell_music.play()
 
     def user_turn(self):
         if self.text_box == None:
@@ -391,7 +409,9 @@ class Game:
                             self.spell.animate(animations[self.current_spell]["end"],True,True,kill=True,speed=animation_settings[self.current_spell]["end speed"])
                             self.spell_movement = 0
                             self.spell_ended = True
+
                     if self.animation_percentage(self.spell) >= animation_settings[self.current_spell]["hurt_percentage"]:
+                        
                         self.monster_health_bar.update_health(animation_settings[self.current_spell]["damage"])
                         self.user_stamina_bar.update_stamina(animation_settings[self.current_spell]["stamina cost"])
                         if self.monster.take_damage(animation_settings[self.current_spell]["damage"]) <= 0:
@@ -408,6 +428,7 @@ class Game:
                         self.spell_movement = 0
                         self.spell_started = False
                         self.spell_ended = False
+                        self.spell_music = None
 
     def monster_turn(self):
         self.user_attacked = False
@@ -468,6 +489,7 @@ class Game:
             self.spell_started = False
             self.spell_ended = False
             self.monster_attacked = False
+            self.spell_music = None
 
     def walk(self):
     
