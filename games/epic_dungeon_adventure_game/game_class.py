@@ -45,7 +45,9 @@ monsters = {
         "trigger_percentage":40,
         "send_percentage":45,
         },
-    "story":"ice boss",
+    "story":"In the frozen tundra, an Ice Giant reigns—a colossal figure encased in shimmering ice."+
+    "With piercing blue eyes and immense strength, it embodies the wrath of winter."+
+    "Prepare to confront the chilling power of this formidable foe.",
 },
 
 "demon boss":{
@@ -54,7 +56,8 @@ monsters = {
         "trigger_percentage":30,
         "send_percentage":60,
         },
-    "story":"demon boss",
+    "story":"In the fiery abyss, a Fire Demon wields a colossal flaming sword. With a charred form and"+
+    "burning eyes, it radiates destructive power. Brace yourselves to confront this formidable adversary and its blazing fury.",
 },
 
 "bringer of death":{
@@ -73,9 +76,30 @@ monsters = {
         "trigger_percentage":100,
         "send_percentage":50,
         },
-    "story":"The Bringer of Death emerges from the shadows, wielding a wicked scythe. Cloaked in"+
-    "darkness, they exude an aura of doom. Prepare to confront this merciless reaper and face the harvester of life.",
+    "story":"In the depths of a forgotten crypt, a Necromancer arises. Cloaked in tattered robes,"+
+    "they wield dark magic to command the forces of death.Brace yourselves to confront this sinister figure and their unholy minions.",
 },
+"stone golem":{
+      "attack":{
+        "spell":["rock heavy"],
+        "trigger_percentage":100,
+        "send_percentage":50,
+        },
+    "story":"In a forgotten desert, the Mecha-stone Golem awaits. This colossal construct combines ancient stone and advanced machinery,"+
+    "emanating an eerie energy. With piercing red eyes and formidable strength, it poses a formidable challenge."+
+    "Brace yourselves for a clash with this mechanical behemoth.",
+},
+"evil wizard":{
+      "attack":{
+        "spell":["shadow heavy"],
+        "trigger_percentage":100,
+        "send_percentage":50,
+        },
+    "story":"In this piece of land, an Evil Wizard awaits, seated on an obsidian throne."+
+    "Clad in flowing black robes adorned with runes, this sinister figure exudes dark power."+
+    "With eyes like shards of obsidian and a twisted smile, the wizard is a fearsome adversary, renowned for their mastery of the arcane arts. Brace yourselves for a treacherous battle ahead.",
+},
+
 }
 
 animation_settings = {
@@ -176,6 +200,14 @@ animation_settings = {
         "damage":40,
         "stamina cost":30,
     },
+    "rock heavy":{
+        "repeat speed":0.2,
+        "element":"halloween",
+        "trigger_percentage":90,
+        "hurt_percentage":70,
+        "damage":40,
+        "stamina cost":30,
+    },
 
     "ice boss":{
         "idle":{"speed":0.13},
@@ -205,6 +237,19 @@ animation_settings = {
         "attack":{"speed":0.14},
     },
 
+    "stone golem":{
+        "idle":{"speed":0.11},
+        "take hit":{"speed":0.1},
+        "death":{"speed":0.15},
+        "attack":{"speed":0.15},
+    },
+
+    "evil wizard":{
+        "idle":{"speed":0.11},
+        "take hit":{"speed":0.1},
+        "death":{"speed":0.15},
+        "attack":{"speed":0.15},
+    },
 }
 
 class Game:
@@ -270,6 +315,7 @@ class Game:
             self.new_level()
             return
         self.current_monster = self.boss_queue[0]
+        # self.current_monster = "evil wizard"
         self.monster = Entity(animations[self.current_monster]["idle"],self.monster_health,default_speed=animation_settings[self.current_monster]["idle"]["speed"])
         self.group.add(self.monster)
 
