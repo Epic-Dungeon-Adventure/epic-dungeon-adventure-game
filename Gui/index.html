@@ -16,8 +16,9 @@
     <img id="logo" src="./images/logo.png" alt="logo">
     <h2 id="hlogo">UNLEASH YOUR INNER HERO</h2>
     <img src="./images/naav.png" alt="nav" id="nav">
-    <!-- <a id="team" href="" target="_blank">Team</a> -->
+
     <div id="nd">
+    <a id="team" href="./team.html">Team</a>
       <h1 id="libname">Nexus World</h1>
       <p id="libdescription">
         In every game,
@@ -25,6 +26,7 @@
         To win,<br>you have to plan,
         adapt, and make bold moves
       </p>
+
     </div>
   </nav>
 
@@ -43,28 +45,32 @@
           <!-- game1 -->
           <div class="scroll">
             <button class="gamesb" id="game1">
-              <img class="gameimg" src="./images/11.jpeg" alt="game1">
+              <img class="gameimg" src="./images/dungame.jpeg" alt="game1">
             </button>
           </div>
+           <!-- game2 -->
           <div class="scroll">
             <button  class="gamesb" id="game2">
-              <img class="gameimg" src="./images/g3.jpg" alt="game2">
+              <img class="gameimg" src="./images/birdp.jpg" alt="game2">
             </button>
           </div>
+           <!-- game3 -->
           <div class="scroll">
             <button  class="gamesb" id="game3">
-              <img class="gameimg" src="./images/g4.jpg" alt="game3">
+              <img class="gameimg" src="./images/whack.jpeg" alt="game3">
             </button>
           </div>
+          <!-- blockgame1 -->
           <div class="scroll">
-            <button class="gamesb"  id="game4">
-              <img class="gameimg" src="./images/g5.jpg" alt="game4">
-            </button>
+
+              <img class="gameblock" src="./images/block.png" alt="game4">
+
           </div>
+          <!-- blockgame2 -->
           <div class="scroll">
-            <button class="gamesb"  id="game5">
-              <img class="gameimg" src="./images/g6.jpg" alt="game5">
-            </button>
+
+              <img class="gameblock" src="./images/block.png" alt="game5">
+
           </div>
         </div>
       </div>
@@ -79,7 +85,7 @@
 
         <div id="most1">
           <p id="the">The </p>
-          <p id="pop">Game Library </p>
+          <p id="pop">Games Library </p>
           <div id="line"></div>
           <br>
           <br>
@@ -101,7 +107,7 @@
     <p class="pgame2">Venture through perilous dungeons, battling monsters and solving puzzles,</br>
     on a desperate quest to find the cure and save humanity.</p>
     <button class="play" id="playButton" value="epic dungeon adventure">Start game</button>
-    <button id="tut">Watch Tutorial</button>
+    <button id="tut">Watch Trailer</button>
 
   </div>
   </div>
@@ -168,8 +174,10 @@
 <img src="./images/back2.png" >
   </button>
   <div class="gamew2">
-    <img  class="imgw2" src="./images/game1-details.jpg" alt="Game 2 Details">
-    <p  class="pgame2" > Description</p>
+    <img  class="imgw2" src="./images/flappy.png" alt="Game 2 Details">
+    <p  id="flappydes" class="pgame2" >Tap the screen to flap the bird's wings and navigate through gaps in pipes,
+     mastering the </br> challenge of
+     precise timing in this addictive side-scrolling  game.</p>
     <button  class="play"  id="playButton2" value="flappy bird">Play</button>
 
   </div>
@@ -198,8 +206,9 @@
 <img src="./images/back2.png" >
   </button>
   <div class="gamew2">
-    <img  class="imgw2" src="./images/game1-details.jpg" alt="Game3 Details">
-    <p  class="pgame2">Description</p>
+    <img  class="imgw2" src="./images/whacklogo.png" alt="Game3 Details">
+    <p  class="pgame2">Smash those pesky critters as they pop up from their holes,
+     testing your speed</br> and accuracy in this addictive arcade game!</p> </br>
     <button  class="play" id="playButton3">Play</button>
 
   </div>
@@ -220,43 +229,6 @@
       game3Details.style.display = 'none'; // Hide the game1Details div
     });
   </script>
-
-
-
-
-<!-- Button4-->
-  <!-- Hidden div to be displayed on button click -->
-  <div  class="gamedwindow" id="game4Details" style="display: none;">
-   <button class="back" id="backButton4">
-<img src="./images/back2.png" >
-  </button>
-  <div class="gamew2">
-    <img  class="imgw2"  src="./images/game1-details.jpg" alt="Game 4 Details">
-    <p  class="pgame2" > Description</p>
-    <button class="play" id="playButton4">Play</button>
-
-  </div>
-</div>
-  <script>
-    // Get references to the buttons
-    var game4Button = document.getElementById('game4');
-    var game4Details = document.getElementById('game2Details');
-    var backButton4 = document.getElementById('backButton4');
-
-    // Add event listener to the game1Button
-    game4Button.addEventListener('click', function() {
-      game4Details.style.display = 'block'; // Show the game1Details div
-    });
-
-    // Add event listener to the backButton
-    backButton4.addEventListener('click', function() {
-      game4Details.style.display = 'none'; // Hide the game1Details div
-    });
-  </script>
-
-
-
-
 
 
 
