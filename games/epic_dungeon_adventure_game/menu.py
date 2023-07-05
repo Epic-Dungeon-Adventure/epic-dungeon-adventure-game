@@ -131,7 +131,7 @@ class MainMenu(Menu):
                     sys.exit()
                 elif event.type == pygame.KEYDOWN:
                     return
-
+ 
             about_menu.window.blit(about_menu.background_image, (0, 0))
 
             current_y = y
