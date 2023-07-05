@@ -11,17 +11,16 @@ clock = pygame.time.Clock()
 
 animations = get_animations()
 
-game = Game(screen)
+game = Game(screen, inital_state = "main menu")
 
-def play():
+def play_game_class():
    global game 
    game = Game(screen)
-   game.state = "walk"
 
 
 
 # game_over_menu = GameOverMenu(screen, play)
-main_menu = MainMenu(screen, play)
+main_menu = MainMenu(screen, play_game_class)
 # pause_menu = PauseMenu(screen, play)
 
 def play():

@@ -59,7 +59,7 @@ class MainMenu(Menu):
         quit_button_y = self.window_height // 2 + 120
 
         class MenuButton(pygame.sprite.DirtySprite):
-            def __init__(self, x, y, on_image_path, off_image_path, func, exit_menu):
+            def __init__(self, x, y, on_image_path, off_image_path, func, exit_menu = None):
                 super().__init__()
                 self.on_image = pygame.image.load(os.path.join(assets_dir, on_image_path)).convert_alpha()
                 self.off_image = pygame.image.load(os.path.join(assets_dir, off_image_path)).convert_alpha()
@@ -82,8 +82,8 @@ class MainMenu(Menu):
                         mouse_pos = pygame.mouse.get_pos()
                         if self.rect.collidepoint(mouse_pos):
                             self.func()
-                            print(self.exit_menu)
-                            self.exit_menu()
+                            if self.exit_menu != None:
+                                self.exit_menu()
 
             def update(self, event=None):
                 self.dirty = True
@@ -95,14 +95,14 @@ class MainMenu(Menu):
                     self.image = self.off_image
 
         play_button = MenuButton(button_x, play_button_y, "on/play_on.png", "off/play_off.png", play, self.exit_menu)
-        about_button = MenuButton(button_x, about_button_y, "on/about_on.png", "off/about_off.png", self.about_screen, self.exit_menu)
+        about_button = MenuButton(button_x, about_button_y, "on/about_on.png", "off/about_off.png", self.about_screen)
         quit_button = MenuButton(button_x, quit_button_y, "on/quit_on.png", "off/quit_off.png", self.quit, self.exit_menu)
 
         self.button_group.add(play_button, about_button, quit_button)
 
-    @staticmethod
-    def about_screen():
-        about_menu = Menu(1600, 800, "About", "background.png")
+    
+    def about_screen(self):
+        about_menu = Menu(self.window, "About", "background.png")
 
         instructions_text = [
             "Welcome to the Epic Dungeon Adventure Game!",

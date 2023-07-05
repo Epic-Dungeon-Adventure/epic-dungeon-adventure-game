@@ -208,7 +208,7 @@ animation_settings = {
 }
 
 class Game:
-    def __init__(self, screen, level = "dark woods", level_num = 0):
+    def __init__(self, screen, level = "dark woods", level_num = 0, inital_state = "walk"):
         self.level = level
         self.completed_levels = level_num
         self.monster_health = 10
@@ -216,8 +216,8 @@ class Game:
         self.user_health = 400
         self.user_stamina = 200
         self.user_stamina_recovery = 20
-        self.state = "main menu"
-        self.font = pygame.font.Font("C:/Windows/Fonts/cour.ttf",28)
+        self.state = inital_state
+        self.font = pygame.font.SysFont("Inkfree",28)
         self.screen = screen
         self.user = Entity(animations["main character"]["idle"], self.user_health)
         self.monster = Entity(animations["bringer of death"]["idle"], self.monster_health)
