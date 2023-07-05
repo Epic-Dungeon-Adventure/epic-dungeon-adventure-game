@@ -4,7 +4,6 @@
 
 # @eel.expose
 # def chose_game(name):
-#     print(name)
 #     if name == "epic dungeon adventure":
 #         from games.epic_dungeon_adventure_game.game import play
 #     elif name == "flappy bird":

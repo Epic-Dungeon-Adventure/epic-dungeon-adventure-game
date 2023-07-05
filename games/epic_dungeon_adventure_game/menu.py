@@ -82,7 +82,7 @@ class Menu:
 
     def exit_menu(self):
         self.exit = True
-        print("called")
+
 
 class MainMenu(Menu):
     def __init__(self, screen, play):

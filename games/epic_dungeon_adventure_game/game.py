@@ -5,7 +5,7 @@ from .game_class import Game
 from .menu import GameOverMenu,MainMenu,PauseMenu
 
 pygame.init()
-screen = pygame.display.set_mode((1300, 800))
+screen = pygame.display.set_mode((1400, 800))
 pygame.display.set_caption("Epic Dungeon Adventure")
 clock = pygame.time.Clock()
 

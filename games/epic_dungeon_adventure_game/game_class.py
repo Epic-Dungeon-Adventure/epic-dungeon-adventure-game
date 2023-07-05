@@ -12,19 +12,19 @@ animations = get_animations()
 levels = {
     "dark woods":{
         "background":("./games/epic_dungeon_adventure_game/assets/background/dark_woods/Layer", 8),
-        "background music":"PATH",
-        "monsters":["ice boss", "necromancer"],
+        "background music":"./games/epic_dungeon_adventure_game/assets/sound/dark woods background.mp3",
+        "monsters":["evil wizard", "bringer of death"],
     },
 
     "rock cave":{
         "background":("./games/epic_dungeon_adventure_game/assets/background/rock_cave/Layer", 5),
-        "background music":"PATH",
-        "monsters":["ice boss", "demon boss"],
+        "background music":"./games/epic_dungeon_adventure_game/assets/sound/rock cave background.mp3",
+        "monsters":["ice boss", "stone golem"],
     },
 
-    "red forest":{
+    "crimson forest":{
         "background":("./games/epic_dungeon_adventure_game/assets/background/red_forest/", 7),
-        "background music":"PATH",
+        "background music":"./games/epic_dungeon_adventure_game/assets/sound/crimson_forest_background.mp3",
         "monsters":["necromancer", "demon boss"],
     }
 }
@@ -79,6 +79,7 @@ monsters = {
     "story":"In the depths of a forgotten crypt, a Necromancer arises. Cloaked in tattered robes,"+
     "they wield dark magic to command the forces of death.Brace yourselves to confront this sinister figure and their unholy minions.",
 },
+
 "stone golem":{
       "attack":{
         "spell":["rock heavy"],
@@ -89,9 +90,10 @@ monsters = {
     "emanating an eerie energy. With piercing red eyes and formidable strength, it poses a formidable challenge."+
     "Brace yourselves for a clash with this mechanical behemoth.",
 },
+
 "evil wizard":{
       "attack":{
-        "spell":["shadow heavy"],
+        "spell":["shadow heavy","halloween heavy"],
         "trigger_percentage":100,
         "send_percentage":50,
         },
@@ -256,7 +258,7 @@ class Game:
     def __init__(self, screen, level = "dark woods", level_num = 0, inital_state = "walk"):
         self.level = level
         self.completed_levels = level_num
-        self.monster_health = 100
+        self.monster_health = 10
         self.monster_damage = 80
         self.user_health = 400
         self.user_stamina = 200
@@ -270,7 +272,7 @@ class Game:
 
         self.event_box = Entity([pygame.Surface((50, 50))])
         self.event_box.image.set_alpha(0)
-        self.event_box.rect.topleft = (screen.get_width()/2, 400)
+        self.event_box.rect.topleft = (screen.get_width(), 400)
 
         self.boss_queue = levels[self.level]["monsters"]
         self.story_queue = ["In the depths of a frozen cavern, amidst towering ice walls and glittering icicles, an awe-inspiring ice dragon awaits your arrival. Its colossal body, adorned with shimmering scales of ice, emanates an intense coldness that permeates the chamber. As the dragon fixes its piercing gaze upon you, its voice resonates with ancient wisdom, questioning your purpose in its icy domain. With a mixture of wonder and trepidation, your fate becomes intertwined with this majestic creature, as you stand on the threshold of a chilling and thrilling adventure."]
@@ -294,7 +296,14 @@ class Game:
         self.user_stamina_bar = Bar(10, 40, 300, 8, self.user_stamina, "white")
         self.monster_health_bar =  Bar(screen.get_width() - 310, 10, 300, 20, self.monster_health, "red")
 
+        self.background_music = Sound(levels[self.level]["background music"])
+        
+
     def new_level(self):
+        self.background_music.pause()
+        if len(levels.keys()) == self.completed_levels + 1:
+            self.state = "game over"
+            return
         level = list(levels.keys())[self.completed_levels + 1]
         self.__init__(self.screen, level, self.completed_levels + 1)
 
@@ -309,7 +318,7 @@ class Game:
     def event_box_collision(self):
         self.state = "tell story"
         self.state_intilized = False
-        self.event_box.rect.topleft = (self.screen.get_width()/2, 400)
+        self.event_box.rect.topleft = (self.screen.get_width(), 400)
         self.user.animate(self.user.default_animation, True)
         if len(self.boss_queue) == 0:
             self.new_level()
@@ -478,6 +487,7 @@ class Game:
             self.event_box_collision()
 
     def update_state(self):
+        self.background_music.play(True)
         if self.state == "tell story":
             self.tell_story()
 

@@ -6,12 +6,15 @@ class Sound():
         self.path = sound_path
         self.sound = pygame.mixer.Sound(sound_path)
         self.sound.set_volume(volume)
+        self.playing = False
         
     def play(self, loop = False):
-        if loop == False:
-            self.sound.play()
-            return
-        self.sound.play(-1)
+        if self.playing == False:
+            if loop == False:
+                self.sound.play()
+                return
+            self.sound.play(-1)
+            self.playing = True
 
     def pause(self):
         self.sound.stop()
