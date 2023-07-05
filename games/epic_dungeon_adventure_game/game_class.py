@@ -17,14 +17,14 @@ levels = {
     },
 
     "rock cave":{
-        "background":("./games/epic_dungeon_adventure_game/assets/background/background/rock_cave/Layer", 5),
+        "background":("./games/epic_dungeon_adventure_game/assets/background/rock_cave/Layer", 5),
         "background music":"./games/epic_dungeon_adventure_game/assets/sound/background/rock cave background.mp3",
         "monsters":["ice boss", "stone golem"],
     },
 
     "crimson forest":{
         "background":("./games/epic_dungeon_adventure_game/assets/background/red_forest/", 7),
-        "background music":"./games/epic_dungeon_adventure_game/assets/sound/crimson_forest_background.mp3",
+        "background music":"./games/epic_dungeon_adventure_game/assets/sound/background/crimson_forest_background.mp3",
         "monsters":["necromancer", "demon boss"],
     }
 }
@@ -272,7 +272,7 @@ class Game:
     def __init__(self, screen, level = "dark woods", level_num = 0, inital_state = "walk"):
         self.level = level
         self.completed_levels = level_num
-        self.monster_health = 100
+        self.monster_health = 10
         self.monster_damage = 80
         self.user_health = 400
         self.user_stamina = 200
@@ -288,7 +288,8 @@ class Game:
         self.event_box.image.set_alpha(0)
         self.event_box.rect.topleft = (screen.get_width()/4, 400)
 
-        self.boss_queue = levels[self.level]["monsters"]
+        print(self.level)
+        self.boss_queue = list(levels[self.level]["monsters"])
         self.story_queue = ["In the depths of a frozen cavern, amidst towering ice walls and glittering icicles, an awe-inspiring ice dragon awaits your arrival. Its colossal body, adorned with shimmering scales of ice, emanates an intense coldness that permeates the chamber. As the dragon fixes its piercing gaze upon you, its voice resonates with ancient wisdom, questioning your purpose in its icy domain. With a mixture of wonder and trepidation, your fate becomes intertwined with this majestic creature, as you stand on the threshold of a chilling and thrilling adventure."]
         self.text_box = None
         self.group = pygame.sprite.Group()
@@ -528,7 +529,7 @@ class Game:
             background.rect.bottom = self.screen.get_height() - self.ground_hight + 10
             background.render(self.screen)
         self.monster.update()
-        self.monster.rect.midbottom = (self.screen.get_width() - 200, self.screen.get_height() - self.ground_hight)
+        self.monster.rect.midbottom = (self.screen.get_width() - 300, self.screen.get_height() - self.ground_hight)
         self.spell.rect.x += self.spell_movement
         self.spell.update()
         self.spell.image.set_alpha(200)
@@ -546,3 +547,6 @@ class Game:
             self.user_stamina_bar.draw(self.screen)   
             self.user_health_bar.draw(self.screen)
             self.monster_health_bar.draw(self.screen)
+
+# fix wizzar walk idle hurt death
+# fix wizzard and bringer of death
