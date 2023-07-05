@@ -5,7 +5,7 @@ from .game_class import Game
 from .menu import GameOverMenu,MainMenu,PauseMenu
 
 pygame.init()
-screen = pygame.display.set_mode((1600, 800))
+screen = pygame.display.set_mode((1300, 800))
 pygame.display.set_caption("Epic Dungeon Adventure")
 clock = pygame.time.Clock()
 
@@ -19,9 +19,9 @@ def play_game_class():
 
 
 
-# game_over_menu = GameOverMenu(screen, play)
+game_over_menu = GameOverMenu(screen, play_game_class)
 main_menu = MainMenu(screen, play_game_class)
-# pause_menu = PauseMenu(screen, play)
+
 
 def play():
     while True:
@@ -29,16 +29,17 @@ def play():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-        # will handle pause menu here if esc pressed
+        
         
         if game.state == "main menu":
             main_menu.run_menu()
+        elif game.state == "game over" and game.user.animation_complete:
+            game_over_menu.run_menu()
         else:
             screen.fill((0, 0, 0))
             game.draw()
             game.update_state()
-       
+            
         pygame.display.update()
-        print(game.state)
         # print(clock.get_fps())
         clock.tick(60)

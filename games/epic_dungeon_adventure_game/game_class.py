@@ -197,22 +197,22 @@ animation_settings = {
         "death":{"speed":0.15},
         "attack":{"speed":0.18},
     },
-#############
+
     "demon boss":{
         "idle":{"speed":0.13},
         "take hit":{"speed":0.14},
         "death":{"speed":0.15},
         "attack":{"speed":0.14},
     },
-#############
+
 }
 
 class Game:
     def __init__(self, screen, level = "dark woods", level_num = 0, inital_state = "walk"):
         self.level = level
         self.completed_levels = level_num
-        self.monster_health = 10
-        self.monster_damage = 40
+        self.monster_health = 100
+        self.monster_damage = 80
         self.user_health = 400
         self.user_stamina = 200
         self.user_stamina_recovery = 20
@@ -224,9 +224,8 @@ class Game:
         self.spell = Entity(animations['water heavy']['repeat'])
 
         self.event_box = Entity([pygame.Surface((50, 50))])
-        self.event_box.image.fill("white")
-        self.event_box.image.set_alpha(100)
-        self.event_box.rect.topleft = (400, 400)
+        self.event_box.image.set_alpha(0)
+        self.event_box.rect.topleft = (screen.get_width()/2, 400)
 
         self.boss_queue = levels[self.level]["monsters"]
         self.story_queue = ["In the depths of a frozen cavern, amidst towering ice walls and glittering icicles, an awe-inspiring ice dragon awaits your arrival. Its colossal body, adorned with shimmering scales of ice, emanates an intense coldness that permeates the chamber. As the dragon fixes its piercing gaze upon you, its voice resonates with ancient wisdom, questioning your purpose in its icy domain. With a mixture of wonder and trepidation, your fate becomes intertwined with this majestic creature, as you stand on the threshold of a chilling and thrilling adventure."]
@@ -249,7 +248,7 @@ class Game:
 
         self.user_health_bar = Bar(10, 10, 300, 20, self.user_health, "red")
         self.user_stamina_bar = Bar(10, 40, 300, 8, self.user_stamina, "white")
-        self.monster_health_bar =  Bar(1290, 10, 300, 20, self.monster_health, "red")
+        self.monster_health_bar =  Bar(screen.get_width() - 310, 10, 300, 20, self.monster_health, "red")
 
     def new_level(self):
         level = list(levels.keys())[self.completed_levels + 1]
@@ -266,13 +265,12 @@ class Game:
     def event_box_collision(self):
         self.state = "tell story"
         self.state_intilized = False
-        self.event_box.rect.topleft = (800, 400)
+        self.event_box.rect.topleft = (self.screen.get_width()/2, 400)
         self.user.animate(self.user.default_animation, True)
         if len(self.boss_queue) == 0:
             self.new_level()
             return
         self.current_monster = self.boss_queue[0]
-        # self.current_monster = "necromancer"
         self.monster = Entity(animations[self.current_monster]["idle"],self.monster_health,default_speed=animation_settings[self.current_monster]["idle"]["speed"])
         self.group.add(self.monster)
 
@@ -280,7 +278,7 @@ class Game:
         if self.text_box == None:
             text = monsters[self.current_monster]["story"]
             self.create_text_box(text)
-        
+
         keys = self.get_input()
         if keys[pygame.K_SPACE]:
             self.text_box = None
@@ -324,7 +322,7 @@ class Game:
                     self.spell.rect.midleft = self.user.rect.midright
 
                 if self.spell.animation_complete and self.spell_started:
-                    self.spell_movement = 15
+                    self.spell_movement = 10
 
                 if 'heavy' in self.current_spell and not self.spell_started:
                     self.spell.rect.bottomleft = self.monster.rect.bottomleft
@@ -347,7 +345,7 @@ class Game:
                             self.state = "walk"
                             self.boss_queue.pop(0)
                             self.user_attacked = False
-                            self.monster_health_bar = Bar(1290, 10, 300, 20, self.monster_health, "red")
+                            self.monster_health_bar = Bar(self.screen.get_width() - 310, 10, 300, 20, self.monster_health, "red")
 
                         else:
                             self.monster.animate(animations[self.current_monster]["take hit"], True, True,speed=animation_settings[self.current_monster]["take hit"]["speed"])
@@ -369,9 +367,9 @@ class Game:
 
             self.spell = Entity(animations[self.current_spell]["repeat"], default_speed = animation_settings[self.current_spell]["repeat speed"])
             self.spell.kill_after_animation = kill_spell
-        
+
         elif not self.monster_attacked: return
-        
+
         if self.monster_attacked and self.animation_percentage(self.monster) >= monsters[self.current_monster]["attack"]["trigger_percentage"]:
             self.group.add(self.spell)
         else: 
@@ -381,10 +379,10 @@ class Game:
             self.spell.animate(animations[self.current_spell]["start"],True,True,speed=animation_settings[self.current_spell]["start speed"])
             self.spell_started = True
             self.spell.rect.midright = self.monster.rect.midleft
-    
+
         if self.animation_percentage(self.monster) >= monsters[self.current_monster]["attack"]["send_percentage"] and self.spell_started and not "heavy" in self.current_spell:
-            self.spell_movement = -5
-    
+            self.spell_movement = -10
+
         if "heavy" in self.current_spell and not self.spell_started:
             self.spell.rect.midbottom = self.user.rect.midbottom
             self.spell.animation_index = 0
@@ -401,13 +399,13 @@ class Game:
             else:
                 self.spell_ended = True
                 self.spell.rect.midbottom = self.user.rect.midbottom
-        
+
         if self.animation_percentage(self.spell) >= animation_settings[self.current_spell]["hurt_percentage"] and self.spell_ended:
             self.user_health_bar.update_health(self.monster_damage)
             if self.user.take_damage(self.monster_damage) <= 0:
                 self.user.animate(animations["main character"]["death"],True,True,kill=True)
                 self.state = "game over"
-            
+
             else:
                 self.user.animate(animations["main character"]["take hit"],True,True)
                 self.state = "user turn"
@@ -437,7 +435,7 @@ class Game:
     def update_state(self):
         if self.state == "tell story":
             self.tell_story()
-        
+
         if self.state == "monster turn" and self.monster.current_animation != animations[self.current_monster]["take hit"]:
             self.monster_turn()
 
@@ -446,33 +444,28 @@ class Game:
 
         if self.state == "walk" and self.monster.animation_complete and self.user.animation_complete:
             self.walk()
-        
+
 
     def draw(self):
         for background in self.backgrounds:
-            background.rect.bottom = 800 - self.ground_hight + 10
+            background.rect.bottom = self.screen.get_height() - self.ground_hight + 10
             background.render(self.screen)
         self.monster.update()
-        self.monster.rect.midbottom = (1400, 800 - self.ground_hight)
+        self.monster.rect.midbottom = (self.screen.get_width() - 200, self.screen.get_height() - self.ground_hight)
         self.spell.rect.x += self.spell_movement
         self.spell.update()
         self.spell.image.set_alpha(200)
         if self.state == "monster turn":
             self.spell.image = pygame.transform.flip(self.spell.image,True,False)
         self.user.update()
-        self.user.rect.bottom =  800 - self.ground_hight
+        self.user.rect.bottom =  self.screen.get_height() - self.ground_hight
         self.event_box.update()
-        self.event_box.rect.bottom = 800 - self.ground_hight
+        self.event_box.rect.bottom = self.screen.get_height() - self.ground_hight
         self.group.draw(self.screen)
         if self.text_box:
             self.text_box.render_words()
-        
+
         if self.state != "walk":
             self.user_stamina_bar.draw(self.screen)   
             self.user_health_bar.draw(self.screen)
             self.monster_health_bar.draw(self.screen)
-        # print(self.completed_levels)
-
-
-# fix demon boss size then add rock boss and evil wizard
-# add rock heavy spell
