@@ -237,7 +237,6 @@ class Game:
         self.user_attacked = False
         self.monster_attacked = False
         self.ground_hight = 10
-        print(self.level,len(self.boss_queue))
         self.current_monster = self.boss_queue[0]
         self.current_spell = False
         self.spell_movement = 0
