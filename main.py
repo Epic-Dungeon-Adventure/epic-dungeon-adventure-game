@@ -11,7 +11,7 @@ def chose_game(name):
     elif name == "flappy bird":
         from games.Flappy_Bird_Game.game import play
     elif name == "whack mole":
-        from games.whack_mole.game import play
+        from games.whackamole.mole import play
     play()
 
 
