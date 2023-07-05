@@ -1,10 +1,10 @@
 # from games.epic_dungeon_adventure_game.game import play
-
-# play()
-
+from games.whackamole.mole import play
 
 
 
+
+play()
 # ---------------------
 # GUI NARMEEN
 import eel
