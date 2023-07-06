@@ -44,6 +44,7 @@ monsters = {
         "spell":["ice light", "ice heavy"],
         "trigger_percentage":40,
         "send_percentage":45,
+        "immunety":["water"],
         },
     "story":"In the frozen tundra, an Ice Giant reigns—a colossal figure encased in shimmering ice."+
     "With piercing blue eyes and immense strength, it embodies the wrath of winter."+
@@ -55,6 +56,7 @@ monsters = {
         "spell":["fire light"],
         "trigger_percentage":30,
         "send_percentage":60,
+        "immunety":["fire"],
         },
     "story":"In the fiery abyss, a Fire Demon wields a colossal flaming sword. With a charred form and"+
     "burning eyes, it radiates destructive power. Brace yourselves to confront this formidable adversary and its blazing fury.",
@@ -65,6 +67,7 @@ monsters = {
         "spell":["shadow heavy"],
         "trigger_percentage":100,
         "send_percentage":50,
+        "immunety":["water","elctric"],
         },
     "story":"The Bringer of Death emerges from the shadows, wielding a wicked scythe. Cloaked in"+
     "darkness, they exude an aura of doom. Prepare to confront this merciless reaper and face the harvester of life.",
@@ -75,6 +78,7 @@ monsters = {
         "spell":["shadow heavy","halloween heavy"],
         "trigger_percentage":100,
         "send_percentage":50,
+        "immunety":["water","fire"],
         },
     "story":"In the depths of a forgotten crypt, a Necromancer arises. Cloaked in tattered robes,"+
     "they wield dark magic to command the forces of death.Brace yourselves to confront this sinister figure and their unholy minions.",
@@ -85,6 +89,7 @@ monsters = {
         "spell":["rock heavy"],
         "trigger_percentage":100,
         "send_percentage":50,
+        "immunety":["elctric"],
         },
     "story":"In a forgotten desert, the Mecha-stone Golem awaits. This colossal construct combines ancient stone and advanced machinery,"+
     "emanating an eerie energy. With piercing red eyes and formidable strength, it poses a formidable challenge."+
@@ -96,6 +101,7 @@ monsters = {
         "spell":["shadow heavy","halloween heavy"],
         "trigger_percentage":100,
         "send_percentage":50,
+        "immunety":["water"],
         },
     "story":"In this piece of land, an Evil Wizard awaits, seated on an obsidian throne."+
     "Clad in flowing black robes adorned with runes, this sinister figure exudes dark power."+
@@ -229,7 +235,6 @@ animation_settings = {
         "death":{"speed":0.15},
         "attack":{"speed":0.14},
         "death sound":"Path",
-        "imunety":["water"],
     },
 
     "bringer of death":{
@@ -381,6 +386,7 @@ class Game:
         if self.text_box == None:
             text = "1 heavy water spell 30 damage         2 light water spell 10 damage \n \n 3 heavy fire spell 30 damage           "
             text += "4 light fire spell 10 damage \n \n 5 heavy electric spell 30 damage       6 light electric spell 10 damage"
+            text += " \n \n immunety        "+"    ".join(monsters[self.current_monster]["attack"]["immunety"])
             self.create_text_box(text, 0.3)
 
         self.get_user_attack()
@@ -411,10 +417,12 @@ class Game:
                             self.spell_ended = True
 
                     if self.animation_percentage(self.spell) >= animation_settings[self.current_spell]["hurt_percentage"]:
-                        
-                        self.monster_health_bar.update_health(animation_settings[self.current_spell]["damage"])
+                        damage = animation_settings[self.current_spell]["damage"]
+                        if animation_settings[self.current_spell]["element"] in monsters[self.current_monster]["attack"]["immunety"]:
+                            damage = 0
+                        self.monster_health_bar.update_health(damage)
                         self.user_stamina_bar.update_stamina(animation_settings[self.current_spell]["stamina cost"])
-                        if self.monster.take_damage(animation_settings[self.current_spell]["damage"]) <= 0:
+                        if self.monster.take_damage(damage) <= 0:
                             self.monster.animate(animations[self.current_monster]["death"], True, True,False,True,animation_settings[self.current_monster]["death"]["speed"])
                             self.state = "walk"
                             self.boss_queue.pop(0)
