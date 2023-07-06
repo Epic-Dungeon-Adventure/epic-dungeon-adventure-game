@@ -12,8 +12,8 @@ def chose_game(name):
         from games.whackamole.mole import play
     play()
 
-
-eel.start('index.html')
+# , cmdline_args=['--kiosk']
+eel.start('index.html', cmdline_args=['--kiosk'])
 
 from games.epic_dungeon_adventure_game.game import play
 

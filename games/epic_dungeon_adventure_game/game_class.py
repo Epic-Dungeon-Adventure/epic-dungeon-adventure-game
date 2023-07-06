@@ -64,10 +64,10 @@ monsters = {
 
 "bringer of death":{
       "attack":{
-        "spell":["shadow heavy"],
+        "spell":["shadow heavy","halloween heavy"],
         "trigger_percentage":100,
         "send_percentage":50,
-        "immunety":["water","elctric"],
+        "immunety":["water","electric"],
         },
     "story":"The Bringer of Death emerges from the shadows, wielding a wicked scythe. Cloaked in"+
     "darkness, they exude an aura of doom. Prepare to confront this merciless reaper and face the harvester of life.",
@@ -89,7 +89,7 @@ monsters = {
         "spell":["rock heavy"],
         "trigger_percentage":100,
         "send_percentage":50,
-        "immunety":["elctric"],
+        "immunety":["electric"],
         },
     "story":"In a forgotten desert, the Mecha-stone Golem awaits. This colossal construct combines ancient stone and advanced machinery,"+
     "emanating an eerie energy. With piercing red eyes and formidable strength, it poses a formidable challenge."+
@@ -98,7 +98,7 @@ monsters = {
 
 "evil wizard":{
       "attack":{
-        "spell":["shadow heavy","halloween heavy"],
+        "spell":["shadow heavy"],
         "trigger_percentage":100,
         "send_percentage":50,
         "immunety":["water"],
@@ -152,7 +152,7 @@ animation_settings = {
         "hurt_percentage":20,
         "damage":20,
         "stamina cost":10,
-        "cast sound":"./games/epic_dungeon_adventure_game/assets/sound/spell/fire light.wav",
+        "cast sound":"./games/epic_dungeon_adventure_game/assets/sound/spell/fire-spell-01.wav",
     },
 
     "electric heavy":{
@@ -162,7 +162,7 @@ animation_settings = {
         "hurt_percentage":50,
         "damage":40,
         "stamina cost":30,
-        "cast sound":"./games/epic_dungeon_adventure_game/assets/sound/spell/fire light.wav",
+        "cast sound":"./games/epic_dungeon_adventure_game/assets/sound/spell/electro_hit.wav",
     },
 
     "electric light":{
@@ -174,7 +174,7 @@ animation_settings = {
         "hurt_percentage":20,
         "damage":20,
         "stamina cost":10,
-        "cast sound":"./games/epic_dungeon_adventure_game/assets/sound/spell/fire light.wav",
+        "cast sound":"./games/epic_dungeon_adventure_game/assets/sound/spell/electro_hit.wav",
     },
 
     "shadow heavy":{
@@ -184,7 +184,7 @@ animation_settings = {
         "hurt_percentage":50,
         "damage":40,
         "stamina cost":30,
-        "cast sound":"./games/epic_dungeon_adventure_game/assets/sound/spell/fire light.wav",
+        "cast sound":"./games/epic_dungeon_adventure_game/assets/sound/spell/spell-dark-magic.wav",
     },
 
     "halloween heavy":{
@@ -277,13 +277,13 @@ class Game:
     def __init__(self, screen, level = "dark woods", level_num = 0, inital_state = "walk"):
         self.level = level
         self.completed_levels = level_num
-        self.monster_health = 10
+        self.monster_health = 80
         self.monster_damage = 80
         self.user_health = 400
         self.user_stamina = 200
         self.user_stamina_recovery = 20
         self.state = inital_state
-        self.font = pygame.font.SysFont("Inkfree",28)
+        self.font = pygame.font.SysFont("arial",28)
         self.screen = screen
         self.user = Entity(animations["main character"]["idle"], self.user_health)
         self.monster = Entity(animations["bringer of death"]["idle"], self.monster_health)
@@ -291,7 +291,7 @@ class Game:
 
         self.event_box = Entity([pygame.Surface((50, 50))])
         self.event_box.image.set_alpha(0)
-        self.event_box.rect.topleft = (screen.get_width()/4, 400)
+        self.event_box.rect.topleft = (screen.get_width(), 400)
 
         print(self.level)
         self.boss_queue = list(levels[self.level]["monsters"])
@@ -375,7 +375,7 @@ class Game:
                     kill_spell = True
                     self.user.animate(animations["main character"]["heavy"][animation_settings[self.current_spell]["element"]], True, True)
                 else: 
-                    self.user.animate(animations["main character"]["light"][animation_settings[self.current_spell]["element"]], True, True)
+                    self.user.animate(animations["main character"]["light"][animation_settings[self.current_spell]["element"]], True, True, speed=0.12)
                 self.user_attacked = True
                 self.spell = Entity(animations[self.current_spell]['repeat'], default_speed = animation_settings[self.current_spell]["repeat speed"])
                 self.spell.kill_after_animation = kill_spell
@@ -387,7 +387,7 @@ class Game:
         if self.text_box == None:
             text = "1 heavy water spell 30 damage         2 light water spell 10 damage \n \n 3 heavy fire spell 30 damage           "
             text += "4 light fire spell 10 damage \n \n 5 heavy electric spell 30 damage       6 light electric spell 10 damage"
-            text += " \n \n immunety        "+"    ".join(monsters[self.current_monster]["attack"]["immunety"])
+            text += " \n \n immunety:        "+"    ".join(monsters[self.current_monster]["attack"]["immunety"])
             self.create_text_box(text, 0.3)
 
         self.get_user_attack()
@@ -451,6 +451,10 @@ class Game:
 
             self.spell = Entity(animations[self.current_spell]["repeat"], default_speed = animation_settings[self.current_spell]["repeat speed"])
             self.spell.kill_after_animation = kill_spell
+            # print(self.current_spell)
+            # if self.spell_music == None and animation_settings[self.current_spell]["cast sound"] != None:
+            #         self.spell_music = Sound(animation_settings[self.current_spell]["cast sound"], 1)
+            #         self.spell_music.play()
 
         elif not self.monster_attacked: return
 
