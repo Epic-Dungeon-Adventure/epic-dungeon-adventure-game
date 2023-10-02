@@ -1,3 +1,30 @@
+## Setup
+
+Before you begin, ensure that Python 3.10 is installed on your system .
+
+ Follow these steps to set up and run the API:
+
+1. **Install Dependencies**: Open your terminal and run the following command to install all project dependencies using pip:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Start the main program**: To start, use the following command:
+
+    **for Linux**:
+
+    ```bash
+    python main.py
+    ```
+
+    **for Windows**:
+
+    if you are using VS code click this button
+    ![](./readme_assets/Screenshot%202023-10-02%20210238.png)
+
+    This will launch the GUI.
+
 ## Team Agreement
 ### Cooperation Plan
 #### Husam Obeidat
